@@ -1,51 +1,77 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
+import { LoginResponse, User, UserRole } from './user.interface';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class Auth {
-  private apiUrl = "http://localhost:8080/auth";
+  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:8080/auth';
 
-  async login(email: string, password: string): Promise<boolean> {
-    try {
-      const response = await fetch(`${this.apiUrl}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
-      if (!response.ok) {
-        throw new Error('Falha no login');
-      }
+  constructor() {
+    this.checkToken();
+  }
 
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+  // --- LOGIN ---
+  login(credentials: {email: string, password: string}): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
+      tap(response => {
+
+        localStorage.setItem('token', response.token);
+
+        this.setUserState(response.token);
+      })
+    );
+  }
+
+  register(data: {name: string, email: string, password: string}): Observable<User> {
+    const payload = {
+      ...data,
+      role: 'USER'
+    };
+    return this.http.post<User>(`${this.apiUrl}/register`, payload);
+  }
+
+  // --- LOGOUT ---
+  logout(): void {
+    localStorage.removeItem('token');
+    this.currentUserSubject.next(null);
   }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
-    return !!token;
+    return !!localStorage.getItem('token');
   }
 
-  hasRole(requiredRole: string): boolean {
-    const token = localStorage.getItem('token');
-    if (!token) return false;
+  hasRole(requiredRole: UserRole): boolean {
+    const user = this.currentUserSubject.value;
+    return user?.role === requiredRole;
+  }
 
-    try {
-      const decoded: any = jwtDecode(token);
-      return decoded.roles && decoded.roles.includes(requiredRole);
-    } catch (error) {
-      return false;
+  private checkToken() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.setUserState(token);
     }
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
+  private setUserState(token: string) {
+    try {
+      const decoded: any = jwtDecode(token);
+
+      this.currentUserSubject.next({
+        id: decoded.id,
+        email: decoded.sub,
+        name: decoded.name || 'Usuário',
+        role: decoded.role as UserRole
+      });
+    } catch (e) {
+      this.logout();
+    }
   }
 }
