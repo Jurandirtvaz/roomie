@@ -13,7 +13,7 @@ public class Telefone{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_telefone")
-    private long idTelefone;
+    private Long idTelefone;
 
     @Column(name = "numero")
     private String numero;
