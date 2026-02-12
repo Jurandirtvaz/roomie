@@ -37,6 +37,9 @@ public class AuthService implements UserDetailsService {
         if (this.userRepository.findByEmail(userDTO.getEmail()) != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email já cadastrado!");
         }
+        if (this.userRepository.findByCpf(userDTO.getCpf()) != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CPF já cadastrado!");
+        }
 
         String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
         User newUser = new User(userDTO.getName(), userDTO.getEmail(), userDTO.getCpf(), encryptedPassword, userDTO.getGender(), userDTO.getRole());
