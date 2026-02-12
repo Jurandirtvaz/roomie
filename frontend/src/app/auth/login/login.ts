@@ -31,6 +31,8 @@ export class Login {
 
   registerForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
+    gender: ['', [Validators.required]],
+    phone: ['', [Validators.required, Validators.pattern(/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', [Validators.required]]
@@ -61,7 +63,23 @@ export class Login {
     if (this.registerForm.valid) {
       try {
         
-        await firstValueFrom(this.auth.register(this.registerForm.value));
+        const rawValues = this.registerForm.value;
+        const cleanPhone = rawValues.phone.replace(/\D/g, '');
+        const ddd = cleanPhone.substring(0, 2);
+        const numero = cleanPhone.substring(2);
+
+        const dadosParaEnviar = {
+        name: rawValues.name,
+        email: rawValues.email,
+        password: rawValues.password,
+        gender: rawValues.gender,
+
+        telefones: [
+          { ddd: ddd, numero: numero }
+        ]
+      };
+
+        await firstValueFrom(this.auth.register(dadosParaEnviar));
         alert('Cadastro realizado com sucesso! Faça login.');
         this.togglePanel(); 
         this.registerForm.reset();

@@ -16,10 +16,40 @@
       </div>
 
       <div class="input-group">
+        <label>Gênero:</label>
+        
+        <div class="gender-options">
+          <input type="radio" id="gender-male" value="MALE" formControlName="gender" name="gender">
+          <label for="gender-male" class="gender-btn">Masculino</label>
+
+          <input type="radio" id="gender-female" value="FEMALE" formControlName="gender" name="gender">
+          <label for="gender-female" class="gender-btn">Feminino</label>
+
+          <input type="radio" id="gender-other" value="OTHER" formControlName="gender" name="gender">
+          <label for="gender-other" class="gender-btn">Outro</label>
+        </div>
+
+        <div class="error-message" *ngIf="registerForm.get('gender')?.touched && registerForm.get('gender')?.errors?.['required']">
+          Selecione uma opção.
+        </div>
+      </div>
+
+      <div class="input-group">
         <label for="email">E-mail:</label>
         <input type="email" placeholder="ex: seu@email.com" formControlName="email" />
         <div class="error-message" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']">
           Email inválido.
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="phone">Telefone:</label>
+        <input type="tel" placeholder="ex: (11) 99999-9999" formControlName="phone" />
+        <div class="error-message" *ngIf="registerForm.get('phone')?.touched && registerForm.get('phone')?.errors?.['required']">
+          Telefone é obrigatório.
+        </div>
+        <div class="error-message" *ngIf="registerForm.get('phone')?.touched && registerForm.get('phone')?.errors?.['pattern']">
+          Formato inválido. Use: (XX) 9XXXX-XXXX
         </div>
       </div>
 
