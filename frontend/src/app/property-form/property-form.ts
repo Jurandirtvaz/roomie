@@ -7,8 +7,8 @@ import { PropertyType } from '../models/property-type.enum';
   selector: 'app-property-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './property-form.component.html',
-  styleUrls: ['./property-form.component.css']
+  templateUrl: './property-form.html',
+  styleUrls: ['./property-form.css']
 })
 export class PropertyFormComponent implements OnInit {
   propertyForm!: FormGroup;
