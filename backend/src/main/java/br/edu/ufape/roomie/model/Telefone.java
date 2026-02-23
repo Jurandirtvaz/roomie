@@ -19,7 +19,7 @@ public class Telefone{
     private String numero;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "id_usuario", nullable = false)
     private User usuario;
 
     public Telefone(String numero, User usuario) {
