@@ -31,11 +31,11 @@ public class User implements UserDetails {
     private String email;
 
     @JsonIgnore
-    @Column(name = "cpf", unique = true)
+    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
     @JsonIgnore
-    @Column(name = "senha")
+    @Column(name = "senha", nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
