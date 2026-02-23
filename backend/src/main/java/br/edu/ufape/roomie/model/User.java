@@ -39,11 +39,11 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "genero")
+    @Column(name = "genero", nullable = false)
     private UserGender gender;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "cargo")
+    @Column(name = "cargo", nullable = false)
     private UserRole role;
 
     @JsonIgnore
