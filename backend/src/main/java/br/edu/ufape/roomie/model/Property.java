@@ -32,7 +32,7 @@ public class Property {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo")
+    @Column(name = "tipo", nullable = false)
     private PropertyType type;
 
     @Column(nullable = false, name = "preco", precision = 10, scale = 2)
