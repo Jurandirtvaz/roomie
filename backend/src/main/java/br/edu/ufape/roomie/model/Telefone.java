@@ -15,7 +15,7 @@ public class Telefone{
     @Column(name = "id_telefone")
     private Long idTelefone;
 
-    @Column(name = "numero")
+    @Column(name = "numero", nullable = false )
     private String numero;
 
     @ManyToOne
