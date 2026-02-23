@@ -27,7 +27,7 @@ public class User implements UserDetails {
     @Column(name = "nome")
     private String name;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @JsonIgnore
