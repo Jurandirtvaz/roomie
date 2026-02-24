@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { Unauthorized } from './unauthorized';
 
 describe('Unauthorized', () => {
@@ -9,7 +9,8 @@ describe('Unauthorized', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Unauthorized]
+      imports: [Unauthorized],
+      providers: [provideRouter([{ path: 'login', component: Unauthorized }])],
     })
     .compileComponents();
 
@@ -24,7 +25,7 @@ describe('Unauthorized', () => {
   });
 
   it('should navigate to login when goBack is called', () => {
-    const navigateSpy = spyOn(router, 'navigate');
+    const navigateSpy = jest.spyOn(router, 'navigate').mockResolvedValue(true);
     component.goBack();
     expect(navigateSpy).toHaveBeenCalledWith(['/login']);
   });
@@ -35,8 +36,4 @@ describe('Unauthorized', () => {
     expect(heading).toBeTruthy();
   });
 });
-
-function spyOn(router: Router, arg1: string) {
-    throw new Error('Function not implemented.');
-}
 
