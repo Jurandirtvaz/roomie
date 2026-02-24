@@ -50,8 +50,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:4200/", 
-                "https://roomie-itvz.onrender.com/" 
+                "http://localhost:4200",
+                "http://localhost:80",
+                "http://localhost",
+                "https://roomie-itvz.onrender.com"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
