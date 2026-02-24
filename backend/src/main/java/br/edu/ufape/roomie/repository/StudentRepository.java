@@ -15,6 +15,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query(value = "INSERT INTO estudante (id_estudante, curso, instituicao) VALUES (:id, :major, :institution)", nativeQuery = true)
     void promoteUserToStudent(@Param("id") Long id, @Param("major") String major, @Param("institution") String institution);
 
+    @Modifying
+    @Query(value = "UPDATE estudante SET curso = :major, instituicao = :institution WHERE id_estudante = :id", nativeQuery = true)
+    int updateStudentProfile(@Param("id") Long id, @Param("major") String major, @Param("institution") String institution);
+
     List<Student> findByInstitution(String institution);
     List<Student> findByMajor(String major);
 

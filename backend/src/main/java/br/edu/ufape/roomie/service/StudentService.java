@@ -25,4 +25,16 @@ public class StudentService {
 
         studentRepository.promoteUserToStudent(userId, major, institution);
     }
+
+    @Transactional
+    public void updateStudentProfile(Long userId, String major, String institution){
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!"));
+
+        int linhasAfetadas = studentRepository.updateStudentProfile(userId, major, institution);
+
+        if (linhasAfetadas == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Este usuário ainda não possui um perfil de estudante para ser atualizado.");
+        }
+    }
 }
