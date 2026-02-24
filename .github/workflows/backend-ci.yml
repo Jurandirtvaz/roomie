@@ -41,10 +41,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Give permission of execution to Maven Wrapper
-        working-directory: ./backend
-        run: chmod +x mvnw
-
       - name: Compile and test with Maven
         working-directory: ./backend
-        run: ./mvnw clean verify -Dspring.profiles.active=test
+        run: mvn clean verify -Dspring.profiles.active=test
