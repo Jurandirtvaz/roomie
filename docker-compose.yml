@@ -32,7 +32,10 @@ services:
       - roomie-network
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        BUILD_CONFIGURATION: development
     container_name: roomie_frontend
     ports:
       - "${FRONTEND_PORT:-4200}:80"
