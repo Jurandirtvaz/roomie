@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../auth/auth';
 import { Router, ActivatedRoute } from '@angular/router'; 
@@ -23,6 +23,7 @@ export class Home implements OnInit {
   private fb = inject(FormBuilder);
   
   private propertyService = inject(PropertyService);
+  private cdr = inject(ChangeDetectorRef);
 
   hasSearched: boolean = false; 
   appliedLocation: string = ''; 
@@ -34,6 +35,7 @@ export class Home implements OnInit {
 
   filterForm: FormGroup = this.fb.group({
     location: [''],
+    district: [''],
     minPrice: [''],
     maxPrice: [''],
     propertyType: ['']
@@ -43,10 +45,12 @@ export class Home implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (Object.keys(params).length > 0) {
         this.hasSearched = true;
-        this.filterForm.patchValue(params);
-        this.appliedLocation = params['location'] || ''; 
+        this.filterForm.patchValue(params, { emitEvent: false });
+        this.appliedLocation = params['location'] || '';
+        this.onFilter();
       }
     });
+
   }
 
   onInitialSearch() {
@@ -57,10 +61,10 @@ export class Home implements OnInit {
     this.onFilter();
   }
 
-  onFilter() {
+  onFilter(silent = false) {
     const formValues = this.filterForm.value;
-    
-    this.appliedLocation = formValues.location; 
+
+    this.appliedLocation = formValues.location;
 
     const cleanParams: any = {};
     Object.keys(formValues).forEach(key => {
@@ -69,26 +73,20 @@ export class Home implements OnInit {
       }
     });
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: cleanParams
-    });
-
-    this.isLoading = true;
+    if (!silent) this.isLoading = true;
 
     this.propertyService.buscarComFiltros(cleanParams).subscribe({
       next: (resultados: any) => {
-        console.log('Imóveis encontrados no Banco de Dados:', resultados);
         this.properties = resultados;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Erro ao buscar imóveis:', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
-    
-
   }
 
 

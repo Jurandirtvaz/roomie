@@ -1,38 +1,27 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PropertyService } from '../../services/propertyService';
 import { Property } from '../../models/property';
 import { PropertyCard } from '../property-card/property-card';
+import { PropertyDetail } from '../property-detail/property-detail';
 
 @Component({
   selector: 'app-property-list',
   standalone: true,
-  imports: [CommonModule, PropertyCard],
+  imports: [CommonModule, PropertyCard, PropertyDetail],
   templateUrl: './property-list.html',
   styleUrl: './property-list.css',
 })
-export class PropertyList implements OnInit {
+export class PropertyList {
   @Input() properties: Property[] = [];
   @Input() loading = false;
 
-  constructor(private propertyService: PropertyService) {}
+  selectedProperty: Property | null = null;
 
-  ngOnInit(): void {
-      this.loadProperties();
+  openDetail(property: Property): void {
+    this.selectedProperty = property;
   }
 
-  loadProperties(){
-    this.loading = true;
-
-    this.propertyService.getAll().subscribe({
-      next: (data) => {
-        this.properties = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error(err);
-        this.loading = false;
-      }
-    });
+  closeDetail(): void {
+    this.selectedProperty = null;
   }
 }
