@@ -111,7 +111,7 @@
     <h3>Fotos do Imóvel</h3>
 
     <div class="image-upload-section">
-      <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
+      <p class="upload-hint">
         Adicione fotos para destacar seu anúncio.
       </p>
 
@@ -119,21 +119,21 @@
           📸 Inserir Imagens
       </button>
 
-      <div *ngIf="showImageUpload" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px dashed #ccc;">
+      <div *ngIf="showImageUpload" class="image-upload-panel">
 
-        <label for="fileInput" style="cursor: pointer; display: inline-block; padding: 8px 15px; background-color: #007bff; color: white; border-radius: 4px; font-weight: bold; margin-bottom: 15px;">
+        <label for="fileInput" class="file-input-label">
           📂 Escolher Arquivos
         </label>
-        <input id="fileInput" type="file" multiple accept="image/*" (change)="onFileSelected($event)" style="display: none;">
+        <input id="fileInput" type="file" multiple accept="image/*" (change)="onFileSelected($event)" class="file-input-hidden">
 
-        <p style="font-size: 13px; color: #666; margin-top: -5px;">Pode selecionar múltiplas imagens.</p>
+        <p class="image-upload-hint">Pode selecionar múltiplas imagens.</p>
 
-        <div *ngIf="imagePreviews.length > 0" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
-          <div *ngFor="let preview of imagePreviews; let i = index" style="position: relative;">
+        <div *ngIf="imagePreviews.length > 0" class="image-previews">
+          <div *ngFor="let preview of imagePreviews; let i = index" class="preview-item">
 
-            <img [src]="preview" alt="Preview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <img [src]="preview" alt="Preview" class="preview-img">
 
-            <button type="button" (click)="removeImage(i)" title="Remover" style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            <button type="button" (click)="removeImage(i)" title="Remover" class="remove-btn">
               ✕
             </button>
 
@@ -141,6 +141,9 @@
         </div>
       </div>
     </div>
+
+    <div *ngIf="submitSuccess" class="alert-success">✅ Imóvel cadastrado com sucesso! Redirecionando...</div>
+    <div *ngIf="submitError" class="alert-error">❌ {{ submitError }}</div>
 
     <button type="submit" [disabled]="propertyForm.invalid || isSubmitting">
       {{ isSubmitting ? 'Salvando...' : 'Salvar Imóvel' }}
