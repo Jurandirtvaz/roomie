@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Home } from './home';
-import { Router } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { Auth } from '../auth/auth';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -10,14 +10,13 @@ describe('Home', () => {
   let component: Home;
   let fixture: ComponentFixture<Home>;
 
-  let mockRouter = { navigate: () => {} };
   let mockAuth = { logout: () => {} };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Home, HttpClientTestingModule, ReactiveFormsModule],
       providers: [
-        { provide: Router, useValue: mockRouter },
+        provideRouter([]),
         { provide: Auth, useValue: mockAuth }
       ]
     })
@@ -33,14 +32,14 @@ describe('Home', () => {
   });
 
   it('should render the header with the "Anunciar Imóvel" button', () => {
-    const anunciarBtn = fixture.debugElement.query(By.css('.btn-create-property'));
+    const buttons = fixture.debugElement.queryAll(By.css('.profile-btn'));
+    const anunciarBtn = buttons.find(b => b.nativeElement.textContent.includes('Anunciar Imóvel'));
     expect(anunciarBtn).toBeTruthy();
-    expect(anunciarBtn.nativeElement.textContent).toContain('Anunciar Imóvel');
   });
 
   it('should render the logout button', () => {
-    const sairBtn = fixture.debugElement.query(By.css('.logout-btn'));
+    const buttons = fixture.debugElement.queryAll(By.css('.profile-btn'));
+    const sairBtn = buttons.find(b => b.nativeElement.textContent.includes('Sair'));
     expect(sairBtn).toBeTruthy();
-    expect(sairBtn.nativeElement.textContent).toContain('Sair');
   });
 });

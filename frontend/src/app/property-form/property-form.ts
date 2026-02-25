@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -18,6 +18,8 @@ export class PropertyFormComponent implements OnInit {
   propertyTypes = Object.values(PropertyType);
   showImageUpload: boolean = false;
   isSubmitting: boolean = false;
+  submitSuccess: boolean = false;
+  submitError: string = '';
 
   selectedFiles: File[] = [];
   imagePreviews: string[] = [];
@@ -26,6 +28,7 @@ export class PropertyFormComponent implements OnInit {
   private router = inject(Router);
   private auth = inject(Auth);
   private propertyService = inject(PropertyService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.propertyForm = this.fb.group({
@@ -63,6 +66,7 @@ export class PropertyFormComponent implements OnInit {
         const reader = new FileReader();
         reader.onload = (e: any) => {
           this.imagePreviews.push(e.target.result);
+          this.cdr.detectChanges();
         };
         reader.readAsDataURL(file);
       }
@@ -72,6 +76,7 @@ export class PropertyFormComponent implements OnInit {
   removeImage(index: number): void {
     this.selectedFiles.splice(index, 1);
     this.imagePreviews.splice(index, 1);
+    this.cdr.detectChanges();
   }
 
   onSubmit(): void {
@@ -89,13 +94,15 @@ export class PropertyFormComponent implements OnInit {
 
       this.propertyService.createProperty(formData).subscribe({
         next: (response) => {
-          alert('Imóvel cadastrado com sucesso!');
+          this.submitSuccess = true;
+          this.submitError = '';
           this.isSubmitting = false;
-          this.router.navigate(['/home']);
+          setTimeout(() => this.router.navigate(['/home'], { queryParams: { from: 'create' } }), 1500);
         },
         error: (err) => {
           console.error('Erro ao salvar imóvel:', err);
-          alert('Erro ao cadastrar o imóvel. Tente novamente mais tarde.');
+          this.submitError = 'Erro ao cadastrar o imóvel. Tente novamente mais tarde.';
+          this.submitSuccess = false;
           this.isSubmitting = false;
         }
       });
@@ -109,7 +116,8 @@ export class PropertyFormComponent implements OnInit {
   }
 
   goToProfile() {
-    alert('Aqui abrirá o Perfil!');
+    // TODO: navegar para a página de perfil quando ela for criada
+    this.router.navigate(['/home']);
   }
 
   onLogout(): void {
