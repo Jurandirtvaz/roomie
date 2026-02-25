@@ -48,6 +48,7 @@ export class PropertyFormComponent implements OnInit {
       }),
 
       acceptAnimals: [false],
+      hasGarage: [false],
       gender: ['MIXED']
     });
   }
