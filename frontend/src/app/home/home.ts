@@ -104,7 +104,8 @@ export class Home implements OnInit {
   }
 
   goToProfile() {
-    alert('Aqui abrirá o Perfil!');
+    // TODO: navegar para a página de perfil quando ela for criada
+    this.router.navigate(['/home']);
   }
 
   onLogout(): void {
