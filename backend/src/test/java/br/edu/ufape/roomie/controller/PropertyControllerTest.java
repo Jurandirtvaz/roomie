@@ -84,6 +84,7 @@ class PropertyControllerTest {
         validDto.setPrice(new BigDecimal("450.00"));
         validDto.setGender(UserGender.OTHER);
         validDto.setAcceptAnimals(true);
+        validDto.setHasGarage(false);
         validDto.setAvailableVacancies(2);
         validDto.setAddress(addressDTO);
 
