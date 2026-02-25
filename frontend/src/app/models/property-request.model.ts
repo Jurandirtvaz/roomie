@@ -18,4 +18,5 @@ export interface PropertyRequest {
   address: Address;
   gender?: string; 
   acceptAnimals?: boolean;
+  hasGarage?: boolean;
 }

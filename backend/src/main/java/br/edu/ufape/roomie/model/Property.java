@@ -49,6 +49,9 @@ public class Property {
     @Column(name = "aceita_animais", nullable = false)
     private Boolean acceptAnimals;
 
+    @Column(name = "tem_garagem", nullable = false)
+    private Boolean hasGarage;
+
     @Column(name = "vagas_disponiveis", nullable = false)
     private Integer availableVacancies;
 

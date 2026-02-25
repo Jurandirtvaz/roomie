@@ -108,6 +108,45 @@
     </div>
 
     <hr>
+    <h3>Características</h3>
+
+    <div class="toggle-group">
+
+      <div class="toggle-item">
+        <span class="toggle-label">Aceita animais?</span>
+        <div class="toggle-buttons">
+          <button type="button"
+            [class.active]="propertyForm.get('acceptAnimals')?.value === true"
+            (click)="propertyForm.get('acceptAnimals')?.setValue(true)">
+            Sim
+          </button>
+          <button type="button"
+            [class.active]="propertyForm.get('acceptAnimals')?.value === false"
+            (click)="propertyForm.get('acceptAnimals')?.setValue(false)">
+            Não
+          </button>
+        </div>
+      </div>
+
+      <div class="toggle-item">
+        <span class="toggle-label">Tem garagem?</span>
+        <div class="toggle-buttons">
+          <button type="button"
+            [class.active]="propertyForm.get('hasGarage')?.value === true"
+            (click)="propertyForm.get('hasGarage')?.setValue(true)">
+            Sim
+          </button>
+          <button type="button"
+            [class.active]="propertyForm.get('hasGarage')?.value === false"
+            (click)="propertyForm.get('hasGarage')?.setValue(false)">
+            Não
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <hr>
     <h3>Fotos do Imóvel</h3>
 
     <div class="image-upload-section">
