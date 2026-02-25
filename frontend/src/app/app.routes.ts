@@ -3,7 +3,8 @@ import { authGuard } from './auth/auth-guard';
 import { Login } from './auth/login/login';
 import { Unauthorized } from './auth/unauthorized/unauthorized';
 import { Home } from './home/home';
-import { PropertyFormComponent } from './property-form/property-form'; 
+import { PropertyFormComponent } from './property-form/property-form';
+import { MeusImoveis } from './pages/meus-imoveis/meus-imoveis';
 
 export const routes: Routes = [
   {
@@ -34,13 +35,20 @@ export const routes: Routes = [
   },
 
   {
-    path: 'properties/new', 
+    path: 'properties/new',
     component: PropertyFormComponent,
-    canActivate: [authGuard], 
+    canActivate: [authGuard],
     title: 'Novo Imóvel - Roomie'
+  },
+  {
+    path: 'meus-imoveis',
+    component: MeusImoveis,
+    canActivate: [authGuard],
+    title: 'Meus Imóveis - Roomie'
   },
   {
     path: '**',
     redirectTo: '/login'
   }
+
 ];
