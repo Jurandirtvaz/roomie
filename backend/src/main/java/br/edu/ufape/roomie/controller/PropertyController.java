@@ -2,6 +2,7 @@ package br.edu.ufape.roomie.controller;
 
 import br.edu.ufape.roomie.dto.PropertyRequestDTO;
 import br.edu.ufape.roomie.model.Property;
+import br.edu.ufape.roomie.projection.PropertyDetailView;
 import br.edu.ufape.roomie.repository.PropertyRepository;
 import br.edu.ufape.roomie.service.PropertyService;
 import jakarta.validation.Valid;
@@ -50,6 +51,18 @@ public class PropertyController {
 
         List<Property> properties = propertyRepository.findWithFilters(loc, dist, min, max, type);
         return ResponseEntity.ok(properties);
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<List<PropertyDetailView>> getAllDetails() {
+        return ResponseEntity.ok(propertyRepository.findAllDetails());
+    }
+
+    @GetMapping("/{id}/details")
+    public ResponseEntity<PropertyDetailView> getDetailById(@PathVariable Long id) {
+        return propertyRepository.findDetailById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }
