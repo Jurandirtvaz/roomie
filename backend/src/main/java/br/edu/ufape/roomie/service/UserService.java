@@ -25,22 +25,21 @@ public class UserService {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Usuário não encontrado!"));
 
-        if(dto.getName() != null){
+        if(dto.getName() != null && !dto.getName().isBlank()){
             user.setName(dto.getName());
         }
 
-        if(dto.getEmail() != null){
-            if(userRepository.findByEmail(dto.getEmail()) != null){
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "E-mail já está em uso.");
+        if (dto.getEmail() != null && !dto.getEmail().isBlank() && !dto.getEmail().equals(user.getEmail())) {
+            if (userRepository.findByEmail(dto.getEmail()) != null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail já está em uso.");
             }
             user.setEmail(dto.getEmail());
         }
 
-        if(dto.getNewPassword() != null){
-            if(!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())){
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "Senha atual incorreta.");
+        if (dto.getNewPassword() != null && !dto.getNewPassword().isBlank()) {
+            if (dto.getCurrentPassword() == null || dto.getCurrentPassword().isBlank() ||
+                    !passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha atual incorreta ou não informada.");
             }
             user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         }
