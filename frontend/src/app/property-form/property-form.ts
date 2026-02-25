@@ -2,14 +2,14 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Auth } from '../auth/auth';
 import { PropertyType } from '../models/property-type.enum';
 import { PropertyService } from '../services/propertyService';
+import { HeaderComponent } from '../components/shared/header/header.component';
 
 @Component({
   selector: 'app-property-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent],
   templateUrl: './property-form.html',
   styleUrls: ['./property-form.css']
 })
@@ -26,7 +26,6 @@ export class PropertyFormComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private auth = inject(Auth);
   private propertyService = inject(PropertyService);
   private cdr = inject(ChangeDetectorRef);
 
@@ -94,7 +93,7 @@ export class PropertyFormComponent implements OnInit {
       }
 
       this.propertyService.createProperty(formData).subscribe({
-        next: (response) => {
+        next: () => {
           this.submitSuccess = true;
           this.submitError = '';
           this.isSubmitting = false;
@@ -112,19 +111,6 @@ export class PropertyFormComponent implements OnInit {
     }
   }
 
-  goBackHome() {
-    this.router.navigate(['/home']);
-  }
-
-  goToProfile() {
-    // TODO: navegar para a página de perfil quando ela for criada
-    this.router.navigate(['/home']);
-  }
-
-  onLogout(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
-  }
 
   getLabelForType(type: string): string {
     switch (type) {

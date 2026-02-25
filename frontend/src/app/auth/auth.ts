@@ -68,6 +68,20 @@ export class Auth {
     return user?.role === requiredRole;
   }
 
+  /**
+   * Atualiza campos do usuário em memória sem precisar de novo login.
+   *
+   * ⚠️ IMPORTANTE: deve ser chamado APENAS após confirmação bem-sucedida
+   * do backend (resposta 2xx). Nunca chame com dados não verificados pelo servidor,
+   * pois é a única fonte de verdade para o estado de autenticação em memória.
+   */
+  updateCurrentUser(updates: Partial<User>): void {
+    const current = this.currentUserSubject.value;
+    if (current) {
+      this.currentUserSubject.next({ ...current, ...updates });
+    }
+  }
+
   private checkToken() {
     const token = localStorage.getItem('token');
     if (token) {

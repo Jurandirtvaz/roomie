@@ -1,23 +1,19 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Auth } from '../auth/auth';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { PropertyService } from './property.service';
-
-
 import { PropertyList } from '../components/property-list/property-list';
+import { HeaderComponent } from '../components/shared/header/header.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-
-  imports: [CommonModule, ReactiveFormsModule, PropertyList],
+  imports: [CommonModule, ReactiveFormsModule, PropertyList, HeaderComponent],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
-  private auth = inject(Auth);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
@@ -50,7 +46,6 @@ export class Home implements OnInit {
         this.onFilter();
       }
     });
-
   }
 
   onInitialSearch() {
@@ -63,7 +58,6 @@ export class Home implements OnInit {
 
   onFilter(silent = false) {
     const formValues = this.filterForm.value;
-
     this.appliedLocation = formValues.location;
 
     const cleanParams: any = {};
@@ -89,7 +83,6 @@ export class Home implements OnInit {
     });
   }
 
-
   goBackHome() {
     this.hasSearched = false;
     this.appliedLocation = '';
@@ -101,25 +94,6 @@ export class Home implements OnInit {
       relativeTo: this.route,
       queryParams: {}
     });
-  }
-
-  goToProfile() {
-    // TODO: navegar para a página de perfil quando ela for criada
-    this.router.navigate(['/home']);
-  }
-
-  onLogout(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
-  }
-
-  goToCreateProperty() {
-    this.router.navigate(['/properties/new']);
-
-  }
-
-  goToMyProperties() {
-  this.router.navigate(['/meus-imoveis']);
   }
 
 }
