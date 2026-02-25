@@ -32,7 +32,7 @@ export class Login {
     name: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
     cpf: ['', [Validators.required, this.cpfValidator]],
-    phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,11}$')]],
+    phone: ['', [Validators.required, Validators.pattern('^[\\d()\\s\\-+]{10,15}$')]],
     gender: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', [Validators.required]]
