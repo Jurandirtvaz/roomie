@@ -1,0 +1,18 @@
+<h2>Meus Imóveis</h2>
+
+<div *ngIf="properties.length === 0">
+  Nenhum imóvel cadastrado.
+</div>
+
+<div *ngFor="let property of properties" class="card">
+  <h3>{{ property.title }}</h3>
+  <p>Preço: R$ {{ property.price }}</p>
+  <p>Status: {{ property.status }}</p>
+
+  <button
+    *ngIf="property.status === 'DRAFT'"
+    (click)="publish(property.id)">
+    Publicar
+  </button>
+</div>
+

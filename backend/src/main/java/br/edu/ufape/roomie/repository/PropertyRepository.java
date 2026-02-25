@@ -1,6 +1,7 @@
 package br.edu.ufape.roomie.repository;
 
 import br.edu.ufape.roomie.model.Property;
+import br.edu.ufape.roomie.model.User;
 import br.edu.ufape.roomie.projection.PropertyDetailView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,7 +30,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     Optional<PropertyDetailView> findDetailById(@Param("id") Long id);
 
     @Query("SELECT p FROM Property p LEFT JOIN p.address a " +
-            "WHERE (:location = '[ALL]' OR LOWER(a.city) LIKE LOWER(CONCAT('%', :location, '%'))) " +
+            "WHERE p.status = br.edu.ufape.roomie.enums.PropertyStatus.ACTIVE " +
+            "AND (:location = '[ALL]' OR LOWER(a.city) LIKE LOWER(CONCAT('%', :location, '%'))) " +
             "AND (:district = '[ALL]' OR LOWER(a.district) LIKE LOWER(CONCAT('%', :district, '%'))) " +
             "AND (:minPrice < 0 OR p.price >= :minPrice) " +
             "AND (:maxPrice < 0 OR p.price <= :maxPrice) " +
@@ -41,4 +43,6 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
         @Param("maxPrice") double maxPrice,
         @Param("type") String type
     );
+    List<Property> findByOwner(User owner);
+
 }
