@@ -1,37 +1,34 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../auth/auth';
-import { Router, ActivatedRoute } from '@angular/router'; 
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { PropertyService } from './property.service';
-
-
 import { PropertyList } from '../components/property-list/property-list';
+import { HeaderComponent } from '../components/shared/header/header.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-
-  imports: [CommonModule, ReactiveFormsModule, PropertyList],
+  imports: [CommonModule, ReactiveFormsModule, PropertyList, HeaderComponent],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
-  private auth = inject(Auth);
   private router = inject(Router);
-  private route = inject(ActivatedRoute); 
+  private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
-  
+
   private propertyService = inject(PropertyService);
   private cdr = inject(ChangeDetectorRef);
 
-  hasSearched: boolean = false; 
-  appliedLocation: string = ''; 
-  
+  hasSearched: boolean = false;
+  appliedLocation: string = '';
+
   properties: any[] = [];
   isLoading: boolean = false;
-  
-  initialSearch = new FormControl(''); 
+
+  initialSearch = new FormControl('');
 
   filterForm: FormGroup = this.fb.group({
     location: [''],
@@ -50,7 +47,6 @@ export class Home implements OnInit {
         this.onFilter();
       }
     });
-
   }
 
   onInitialSearch() {
@@ -63,7 +59,6 @@ export class Home implements OnInit {
 
   onFilter(silent = false) {
     const formValues = this.filterForm.value;
-
     this.appliedLocation = formValues.location;
 
     const cleanParams: any = {};
@@ -89,14 +84,13 @@ export class Home implements OnInit {
     });
   }
 
-
   goBackHome() {
     this.hasSearched = false;
-    this.appliedLocation = ''; 
+    this.appliedLocation = '';
     this.initialSearch.reset();
     this.filterForm.reset();
-    this.properties = []; 
-    
+    this.properties = [];
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {}
@@ -115,6 +109,11 @@ export class Home implements OnInit {
 
   goToCreateProperty() {
     this.router.navigate(['/properties/new']);
-  
+
   }
+
+  goToMyProperties() {
+  this.router.navigate(['/meus-imoveis']);
+  }
+
 }

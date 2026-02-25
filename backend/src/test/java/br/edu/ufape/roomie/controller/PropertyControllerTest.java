@@ -32,6 +32,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = PropertyController.class, excludeAutoConfiguration = UserDetailsServiceAutoConfiguration.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -46,6 +47,7 @@ class PropertyControllerTest {
 
     @MockitoBean
     private PropertyService propertyService;
+
 
     @MockitoBean
     private PropertyRepository propertyRepository;
@@ -84,6 +86,7 @@ class PropertyControllerTest {
         validDto.setPrice(new BigDecimal("450.00"));
         validDto.setGender(UserGender.OTHER);
         validDto.setAcceptAnimals(true);
+        validDto.setHasGarage(false);
         validDto.setAvailableVacancies(2);
         validDto.setAddress(addressDTO);
 
@@ -113,5 +116,27 @@ class PropertyControllerTest {
                 .andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 Bad Request se o título for vazio (Validação @Valid)")
+    @WithMockUser
+    void deveFalharValidacao() throws Exception {
+        var dto = new PropertyRequestDTO();
+        dto.setTitle("");
+        dto.setPrice(new BigDecimal("1000"));
+
+        String dtoJson = propertyRequestDTOJacksonTester.write(dto).getJson();
+        MockMultipartFile dataPart = new MockMultipartFile(
+                "data",
+                "",
+                MediaType.APPLICATION_JSON_VALUE,
+                dtoJson.getBytes(StandardCharsets.UTF_8)
+        );
+
+        mvc.perform(multipart("/api/properties")
+                .file(dataPart)
+                .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isBadRequest());
     }
 }

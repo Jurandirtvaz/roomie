@@ -28,6 +28,9 @@ public class PropertyRequestDTO {
     @NotNull(message = "Informe se aceita animais")
     private Boolean acceptAnimals;
 
+    @NotNull(message = "Informe se tem garagem")
+    private Boolean hasGarage;
+
     @NotNull(message = "A quantidade de vagas é obrigatória")
     @Min(value = 1, message = "Deve haver pelo menos 1 vaga disponível")
     private Integer availableVacancies;

@@ -41,6 +41,7 @@ public class PropertyService {
         property.setPrice(dto.getPrice());
         property.setGender(dto.getGender());
         property.setAcceptAnimals(dto.getAcceptAnimals());
+        property.setHasGarage(dto.getHasGarage());
         property.setAvailableVacancies(dto.getAvailableVacancies());
         property.setStatus(PropertyStatus.DRAFT);
 

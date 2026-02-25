@@ -1,0 +1,80 @@
+<header class="topbar-blue">
+  <h2 class="logo-text" (click)="onLogoClick()" title="Início">Roomie</h2>
+
+  <div class="header-buttons">
+    <button *ngIf="showCreateProperty" class="outline-btn" (click)="goToCreateProperty()">
+      + Cadastrar Imóvel
+    </button>
+
+    <div class="user-menu-wrapper" *ngIf="user$ | async as user">
+      <button
+        class="user-button"
+        (click)="toggleMenu()"
+        (keydown)="onButtonKeydown($event)"
+        aria-haspopup="true"
+        [attr.aria-expanded]="isMenuOpen"
+        aria-controls="user-dropdown-menu"
+        [attr.aria-label]="'Menu do usuário ' + user.name"
+      >
+        <span class="user-initials" aria-hidden="true">{{ getInitials(user.name) }}</span>
+        <span class="arrow-down" aria-hidden="true">▾</span>
+      </button>
+
+      <div
+        class="user-dropdown"
+        *ngIf="isMenuOpen"
+        id="user-dropdown-menu"
+        role="menu"
+        aria-label="Menu do usuário"
+        (keydown)="onMenuKeydown($event)"
+      >
+        <!-- Cabeçalho com nome e e-mail -->
+        <div class="dropdown-user-info" aria-hidden="true">
+          <div class="dropdown-avatar">{{ getInitials(user.name) }}</div>
+          <div class="dropdown-user-text">
+            <strong>{{ user.name }}</strong>
+            <span>{{ user.email }}</span>
+          </div>
+        </div>
+
+        <hr aria-hidden="true">
+
+        <ul role="none">
+          <li role="menuitem" tabindex="0" (click)="goToProfile()" (keydown.enter)="goToProfile()" (keydown.space)="goToProfile()">
+            <span class="material-icons" aria-hidden="true">person_outline</span>
+            Minha conta
+          </li>
+
+          <li role="menuitem" tabindex="0">
+            <span class="material-icons" aria-hidden="true">favorite_border</span>
+            Favoritos
+          </li>
+
+          <li role="menuitem" tabindex="0" (click)="goToCreateProperty()" (keydown.enter)="goToCreateProperty()" (keydown.space)="goToCreateProperty()">
+            <span class="material-icons" aria-hidden="true">add_circle_outline</span>
+            Cadastrar Imóvel
+          </li>
+
+          <li role="menuitem" tabindex="0" (click)="goToMyProperties()" (keydown.enter)="goToMyProperties()" (keydown.space)="goToMyProperties()">
+            <span class="material-icons" aria-hidden="true">home_work</span>
+            Meus Imóveis
+          </li>
+
+          <!-- Visível apenas para não-administradores -->
+          <li *ngIf="user.role !== 'ADMIN'" role="menuitem" tabindex="0" (click)="goToStudentProfile()" (keydown.enter)="goToStudentProfile()" (keydown.space)="goToStudentProfile()">
+            <span class="material-icons" aria-hidden="true">school</span>
+            Minha Instituição
+          </li>
+
+          <hr aria-hidden="true" role="none">
+
+          <li role="menuitem" tabindex="0" class="logout-item" (click)="onLogout()" (keydown.enter)="onLogout()" (keydown.space)="onLogout()">
+            <span class="material-icons" aria-hidden="true">logout</span>
+            Sair
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</header>

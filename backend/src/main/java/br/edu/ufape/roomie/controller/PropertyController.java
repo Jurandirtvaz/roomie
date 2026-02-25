@@ -2,16 +2,21 @@ package br.edu.ufape.roomie.controller;
 
 import br.edu.ufape.roomie.dto.PropertyRequestDTO;
 import br.edu.ufape.roomie.model.Property;
+import br.edu.ufape.roomie.projection.PropertyDetailView;
 import br.edu.ufape.roomie.repository.PropertyRepository;
 import br.edu.ufape.roomie.service.PropertyService;
+import br.edu.ufape.roomie.model.User;
+import br.edu.ufape.roomie.enums.PropertyStatus;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/properties")
@@ -50,6 +55,45 @@ public class PropertyController {
 
         List<Property> properties = propertyRepository.findWithFilters(loc, dist, min, max, type);
         return ResponseEntity.ok(properties);
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<List<PropertyDetailView>> getAllDetails() {
+        return ResponseEntity.ok(propertyRepository.findAllDetails());
+    }
+
+    @GetMapping("/{id}/details")
+    public ResponseEntity<PropertyDetailView> getDetailById(@PathVariable Long id) {
+        return propertyRepository.findDetailById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/meus")
+    public ResponseEntity<List<Property>> getMyproperties(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        List<Property> properties = propertyRepository.findByOwner(user); 
+        return ResponseEntity.ok(properties);
+    }
+    
+    @PatchMapping("/{id}/publish")
+    public ResponseEntity<?> publishProperty(@PathVariable Long id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal(); 
+        Property property = propertyRepository.findById(id).orElseThrow(() -> new RuntimeException("Imóvel não encontrado"));
+
+        if(!property.getOwner().getId().equals(user.getId())){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não tem permissão para publicar este imóvel.");
+        }
+
+        if (property.getStatus() == PropertyStatus.ACTIVE) {
+        return ResponseEntity.badRequest()
+                .body("Imóvel já está publicado.");
+        }
+        
+    property.setStatus(PropertyStatus.ACTIVE);
+    propertyRepository.save(property); 
+
+    return ResponseEntity.ok(property); 
     }
 
 }
