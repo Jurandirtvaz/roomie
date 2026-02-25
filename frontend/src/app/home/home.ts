@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Auth } from '../auth/auth';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { PropertyService } from './property.service';
@@ -95,25 +94,6 @@ export class Home implements OnInit {
       relativeTo: this.route,
       queryParams: {}
     });
-  }
-
-  goToProfile() {
-    // TODO: navegar para a página de perfil quando ela for criada
-    this.router.navigate(['/home']);
-  }
-
-  onLogout(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
-  }
-
-  goToCreateProperty() {
-    this.router.navigate(['/properties/new']);
-
-  }
-
-  goToMyProperties() {
-  this.router.navigate(['/meus-imoveis']);
   }
 
 }
