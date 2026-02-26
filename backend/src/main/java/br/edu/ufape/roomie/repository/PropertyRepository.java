@@ -29,13 +29,14 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             "FROM v_detalhes_imovel WHERE id_imovel = :id", nativeQuery = true)
     Optional<PropertyDetailView> findDetailById(@Param("id") Long id);
 
-    @Query("SELECT p FROM Property p LEFT JOIN p.address a " +
-            "WHERE p.status = br.edu.ufape.roomie.enums.PropertyStatus.ACTIVE " +
-            "AND (:location = '[ALL]' OR LOWER(a.city) LIKE LOWER(CONCAT('%', :location, '%'))) " +
-            "AND (:district = '[ALL]' OR LOWER(a.district) LIKE LOWER(CONCAT('%', :district, '%'))) " +
-            "AND (:minPrice < 0 OR p.price >= :minPrice) " +
-            "AND (:maxPrice < 0 OR p.price <= :maxPrice) " +
-            "AND (:type = '[ALL]' OR CAST(p.type AS string) = :type) ")
+    @Query(value = "SELECT p.* FROM imovel p LEFT JOIN endereco a ON p.id_imovel = a.id_imovel " +
+            "WHERE p.status = 'ACTIVE' " +
+            "AND (:location = '[ALL]' OR LOWER(a.cidade) LIKE LOWER(CONCAT('%', :location, '%'))) " +
+            "AND (:district = '[ALL]' OR LOWER(a.bairro) LIKE LOWER(CONCAT('%', :district, '%'))) " +
+            "AND (:minPrice < 0 OR p.preco >= :minPrice) " +
+            "AND (:maxPrice < 0 OR p.preco <= :maxPrice) " +
+            "AND (:type = '[ALL]' OR CAST(p.tipo AS VARCHAR) = :type) ",
+            nativeQuery = true)
     List<Property> findWithFilters(
         @Param("location") String location,
         @Param("district") String district,

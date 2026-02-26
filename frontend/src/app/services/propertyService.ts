@@ -26,7 +26,7 @@ export class PropertyService {
   }
 
   publishProperty(id: number): Observable<any> {
-    return this.http.patch('${this.apiUrl}/${id}/publish', {}); 
+    return this.http.patch(`${this.apiUrl}/${id}/publish`, {});
   }
 
 }

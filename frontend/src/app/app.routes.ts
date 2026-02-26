@@ -60,12 +60,6 @@ export const routes: Routes = [
     title: 'Meus Imóveis - Roomie'
   },
   {
-    path: 'meus-imoveis',
-    component: MeusImoveis,
-    canActivate: [authGuard],
-    title: 'Meus Imóveis - Roomie'
-  },
-  {
     path: '**',
     redirectTo: '/login'
   }
