@@ -34,6 +34,17 @@ O objetivo principal é simplificar o processo de encontrar e organizar moradias
 ### Backend
 [![My Skills](https://skillicons.dev/icons?i=java,spring,postgres,docker)](https://skillicons.dev)
 
+## Deploy
+
+A aplicação está disponível nos seguintes ambientes de produção:
+
+| Serviço | URL |
+|:---|:---|
+| Frontend | [https://roomie-itvz.onrender.com](https://roomie-itvz.onrender.com) |
+| Backend API | [https://roomie-backend-fom2.onrender.com](https://roomie-backend-fom2.onrender.com) |
+
+---
+
 ## Como Rodar o Projeto
 
 Este guia contém as instruções completas para configurar e rodar o ambiente de desenvolvimento localmente usando Docker.
@@ -67,6 +78,12 @@ Se a pasta `database` estiver vazia, execute:
 ```bash
 git submodule update --init --recursive
 ```
+
+#### Atualizando o submodule do banco de dados
+Para sincronizar o submodule com a versão mais recente do repositório remoto:
+```bash
+git submodule update --remote --merge
+```
 ### 2. Configurando Variáveis de Ambiente (.env)
 O sistema é configurável através de um arquivo `.env` na raiz.
 1. Crie um arquivo chamado `.env` na **raiz** do projeto (mesmo local do `docker-compose.yml`).
@@ -88,10 +105,6 @@ O sistema é configurável através de um arquivo `.env` na raiz.
 Com o Docker rodando e o `.env` configurado, execute:
 
 ```bash
-docker-compose up -d
-```
-em seguida:
-```bash
 docker-compose up --build
 ```
 Isso irá:
@@ -106,6 +119,6 @@ Isso irá:
 |Banco de Dados|`localhost`|Host para conexão via DBeaver/PgAdmin (Use a porta que você definiu no .env)|
 
 ## Status do Projeto
-Em desenvolvimento.  
+Em desenvolvimento. Versão inicial disponível em produção.
 
 
