@@ -6,8 +6,6 @@ import br.edu.ufape.roomie.enums.UserGender;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -34,16 +32,14 @@ public class Property {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "tipo", nullable = false, columnDefinition = "tipo_imovel")
+    @Column(name = "tipo", nullable = false)
     private PropertyType type;
 
     @Column(nullable = false, name = "preco", precision = 10, scale = 2)
     private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "genero_moradores", nullable = false, columnDefinition = "tipo_genero")
+    @Column(name = "genero_moradores", nullable = false)
     private UserGender gender;
 
     @Column(name = "aceita_animais", nullable = false)
@@ -56,8 +52,7 @@ public class Property {
     private Integer availableVacancies;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "status", nullable = false, columnDefinition = "status_anuncio")
+    @Column(name = "status", nullable = false)
     private PropertyStatus status = PropertyStatus.DRAFT;
 
     @OneToOne(mappedBy = "property", cascade = CascadeType.ALL)
