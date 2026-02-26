@@ -35,7 +35,7 @@ public class Property {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "tipo", nullable = false)
+    @Column(name = "tipo", nullable = false, columnDefinition = "tipo_imovel")
     private PropertyType type;
 
     @Column(nullable = false, name = "preco", precision = 10, scale = 2)
@@ -43,7 +43,7 @@ public class Property {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "genero_moradores", nullable = false)
+    @Column(name = "genero_moradores", nullable = false, columnDefinition = "tipo_genero")
     private UserGender gender;
 
     @Column(name = "aceita_animais", nullable = false)
@@ -57,7 +57,7 @@ public class Property {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", nullable = false, columnDefinition = "status_anuncio")
     private PropertyStatus status = PropertyStatus.DRAFT;
 
     @OneToOne(mappedBy = "property", cascade = CascadeType.ALL)

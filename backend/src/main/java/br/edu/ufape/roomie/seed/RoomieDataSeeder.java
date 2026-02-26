@@ -4,10 +4,7 @@ import br.edu.ufape.roomie.enums.PropertyStatus;
 import br.edu.ufape.roomie.enums.PropertyType;
 import br.edu.ufape.roomie.enums.UserGender;
 import br.edu.ufape.roomie.enums.UserRole;
-import br.edu.ufape.roomie.model.Address;
-import br.edu.ufape.roomie.model.Property;
-import br.edu.ufape.roomie.model.Student;
-import br.edu.ufape.roomie.model.User;
+import br.edu.ufape.roomie.model.*;
 import br.edu.ufape.roomie.repository.PropertyRepository;
 import br.edu.ufape.roomie.repository.StudentRepository;
 import br.edu.ufape.roomie.repository.UserRepository;
@@ -85,7 +82,7 @@ public class RoomieDataSeeder implements CommandLineRunner {
         // gera 50 imóveis com proprietários aleatórios
         for (int i = 0; i < 50; i++) {
             User randomOwner = savedOwners.get(random.nextInt(savedOwners.size()));
-
+            var photo = new PropertyPhoto();
             var property = new Property();
             property.setOwner(randomOwner);
 

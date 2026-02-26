@@ -43,12 +43,12 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "genero", nullable = false)
+    @Column(name = "genero", nullable = false, columnDefinition = "tipo_genero")
     private UserGender gender;
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "cargo", nullable = false)
+    @Column(name = "cargo", nullable = false, columnDefinition = "user_role")
     private UserRole role;
 
     @JsonIgnore
