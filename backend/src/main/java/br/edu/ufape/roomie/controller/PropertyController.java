@@ -70,9 +70,9 @@ public class PropertyController {
     }
 
     @GetMapping("/meus")
-    public ResponseEntity<List<Property>> getMyproperties(Authentication authentication) {
+    public ResponseEntity<List<PropertyDetailView>> getMyproperties(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        List<Property> properties = propertyRepository.findByOwner(user);
+        List<PropertyDetailView> properties = propertyRepository.findMyDetails(user.getEmail());
         return ResponseEntity.ok(properties);
     }
 

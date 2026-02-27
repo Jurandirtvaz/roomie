@@ -5,11 +5,13 @@ import {UserResponseDto} from '../models/user/user-response.dto';
 import {UpdateUserDto} from '../models/user/update-user.dto';
 import {OwnerReportView} from '../models/owner-report-view';
 
+import { environment } from '../../enviroments/enviroment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private readonly apiUrl = 'http://localhost:8080/api/user';
+  private apiUrl = `${environment.apiUrl}/api/user`;
 
   constructor(private readonly http: HttpClient) {
   }

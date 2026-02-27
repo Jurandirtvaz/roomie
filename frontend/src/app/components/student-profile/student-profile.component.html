@@ -66,7 +66,15 @@
         Telefones de contato
       </h3>
 
-      <div *ngIf="phonesSuccess" class="alert success">
+      <!-- Aviso quando perfil ainda não foi preenchido -->
+      <div class="alert info" *ngIf="!hasProfile">
+        <span class="material-icons">info</span>
+        Preencha e salve sua instituição e curso acima para cadastrar seus telefones de contato.
+      </div>
+
+      <ng-container *ngIf="hasProfile">
+
+      <div class="alert success" *ngIf="phonesSuccess">
         <span class="material-icons">check_circle</span>
         {{ phonesSuccess }}
       </div>
@@ -105,6 +113,8 @@
           {{ isSavingPhones ? 'Salvando...' : 'Salvar telefones' }}
         </button>
       </div>
+
+      </ng-container>
     </div>
 
   </div>

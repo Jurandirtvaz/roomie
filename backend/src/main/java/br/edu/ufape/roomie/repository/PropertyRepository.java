@@ -1,7 +1,6 @@
 package br.edu.ufape.roomie.repository;
 
 import br.edu.ufape.roomie.model.Property;
-import br.edu.ufape.roomie.model.User;
 import br.edu.ufape.roomie.projection.PropertyDetailView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -45,7 +44,12 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             @Param("maxPrice") double maxPrice,
             @Param("type") String type
     );
-
-    List<Property> findByOwner(User owner);
+    @Query(value = "SELECT id_imovel AS idImovel, titulo, descricao, tipo, preco, " +
+            "genero_moradores AS generoMoradores, aceita_animais AS aceitaAnimais, " +
+            "tem_garagem AS temGaragem, vagas_disponiveis AS vagasDisponiveis, status, " +
+            "rua, num_endereco AS numEndereco, bairro, cidade, estado, cep, " +
+            "nome_proprietario AS nomeProprietario, email_proprietario AS emailProprietario " +
+            "FROM v_detalhes_imovel WHERE email_proprietario = :email", nativeQuery = true)
+    List<PropertyDetailView> findMyDetails(@Param("email") String email);
 
 }
