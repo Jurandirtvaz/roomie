@@ -30,6 +30,8 @@ services:
       SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-admin}
       SPRING_JPA_HIBERNATE_DDL_AUTO: none
+    volumes:
+      - uploads_data:/app/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -51,6 +53,7 @@ services:
 
 volumes:
   postgres_data:
+  uploads_data:
 
 networks:
   roomie-network:

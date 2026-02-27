@@ -19,7 +19,8 @@ export class PropertyCard {
 
   get firstPhotoUrl(): string | null {
     if (this.property.photos && this.property.photos.length > 0) {
-      return this.apiBase + this.property.photos[0].path;
+      const path = this.property.photos[0].path;
+      return path.startsWith('http') ? path : this.apiBase + path;
     }
     if (this.property.mainPhotoUrl) {
       return this.property.mainPhotoUrl;
