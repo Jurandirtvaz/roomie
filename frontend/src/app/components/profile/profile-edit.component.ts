@@ -1,18 +1,18 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {UserService} from '../../services/user.service';
-import {UpdateUserDto} from '../../models/user/update-user.dto';
-import {HeaderComponent} from '../shared/header/header.component';
-import {Auth} from '../../auth/auth';
-import {take} from 'rxjs';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { UpdateUserDto } from '../../models/user/update-user.dto';
+import { HeaderComponent } from '../shared/header/header.component';
+import { Auth } from '../../auth/auth';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-profile-edit',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HeaderComponent],
   templateUrl: './profile-edit.component.html',
-  styleUrls: ['./profile-edit.component.css']
+  styleUrls: ['./profile-edit.component.css'],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy {
   profileForm!: FormGroup;
@@ -21,9 +21,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   isLoading = false;
   slowRequest = false;
 
-  private fb = inject(FormBuilder);
-  private userService = inject(UserService);
-  private auth = inject(Auth);
+  private readonly fb = inject(FormBuilder);
+  private readonly userService = inject(UserService);
+  private readonly auth = inject(Auth);
   private slowTimer: number = 0;
 
   ngOnInit(): void {
@@ -31,15 +31,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       name: [''],
       email: [''],
       currentPassword: [''],
-      newPassword: ['']
+      newPassword: [''],
     });
 
     // Pré-carrega os dados do usuário logado no formulário
-    this.auth.currentUser$.pipe(take(1)).subscribe(user => {
+    this.auth.currentUser$.pipe(take(1)).subscribe((user) => {
       if (user) {
         this.profileForm.patchValue({
-          name: user.name !== 'Usuário' ? user.name : '',
-          email: user.email ?? ''
+          name: user.name === 'Usuário' ? '' : user.name,
+          email: user.email ?? '',
         });
       }
     });
@@ -54,7 +54,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     // Validação client-side: nova senha exige senha atual
-    const {newPassword, currentPassword} = this.profileForm.value;
+    const { newPassword, currentPassword } = this.profileForm.value;
     if (newPassword && !currentPassword) {
       this.errorMessage = 'Informe sua senha atual para definir uma nova senha.';
       return;
@@ -92,7 +92,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         // Atualiza o estado em memória imediatamente — sem precisar de novo login
         this.auth.updateCurrentUser({
           name: response.name,
-          email: response.email
+          email: response.email,
         });
 
         this.profileForm.get('currentPassword')?.reset();
@@ -113,7 +113,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         } else {
           this.errorMessage = 'Erro ao atualizar perfil. Tente novamente.';
         }
-      }
+      },
     });
   }
 }

@@ -83,7 +83,7 @@
   align-items: center;
   justify-content: center;
   background: #f0f0f0;
-  color: #aaa;
+  color: #666;
   font-size: 15px;
   border-radius: 16px 16px 0 0;
 }
@@ -181,7 +181,7 @@
 
 .owner-email {
   font-size: 13px;
-  color: #0D83D7;
+  color: #0d83d7;
   margin-top: 4px !important;
   display: flex;
   align-items: center;

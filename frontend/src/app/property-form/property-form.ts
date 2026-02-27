@@ -24,10 +24,10 @@ export class PropertyFormComponent implements OnInit {
   selectedFiles: File[] = [];
   imagePreviews: string[] = [];
 
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
-  private propertyService = inject(PropertyService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly propertyService = inject(PropertyService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.propertyForm = this.fb.group({
@@ -59,8 +59,7 @@ export class PropertyFormComponent implements OnInit {
   onFileSelected(event: any): void {
     const files = event.target.files;
     if (files && files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+      for (const file of files) {
         this.selectedFiles.push(file);
 
         const reader = new FileReader();
@@ -88,8 +87,8 @@ export class PropertyFormComponent implements OnInit {
         type: 'application/json'
       }));
 
-      for (let i = 0; i < this.selectedFiles.length; i++) {
-        formData.append('photos', this.selectedFiles[i]);
+      for (const file of this.selectedFiles) {
+        formData.append('photos', file);
       }
 
       this.propertyService.createProperty(formData).subscribe({

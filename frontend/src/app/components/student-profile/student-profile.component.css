@@ -32,7 +32,7 @@
 
 .page-icon {
   font-size: 42px;
-  color: #0D83D7;
+  color: #0d83d7;
   flex-shrink: 0;
 }
 
@@ -100,7 +100,7 @@
 }
 
 .form-group input:focus {
-  border-color: #0D83D7;
+  border-color: #0d83d7;
 }
 
 .field-error {
@@ -136,7 +136,7 @@
 }
 
 .btn-save {
-  background: #0D83D7;
+  background: #005fa3;
   color: white;
   border: none;
   padding: 12px 32px;
@@ -181,7 +181,7 @@
 }
 
 .phones-title .material-icons {
-  color: #0D83D7;
+  color: #0d83d7;
   font-size: 20px;
 }
 
@@ -207,7 +207,7 @@
 
 .phone-item .material-icons {
   font-size: 16px;
-  color: #0D83D7;
+  color: #0d83d7;
 }
 
 .btn-remove-phone {
@@ -250,14 +250,14 @@
 }
 
 .add-phone-row input:focus {
-  border-color: #0D83D7;
+  border-color: #0d83d7;
 }
 
 .btn-add-phone {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #0D83D7;
+  background: #005fa3;
   color: white;
   border: none;
   padding: 10px 18px;
@@ -282,4 +282,3 @@
   display: flex;
   justify-content: flex-end;
 }
-

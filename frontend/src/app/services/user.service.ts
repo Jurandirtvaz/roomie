@@ -9,9 +9,9 @@ import {OwnerReportView} from '../models/owner-report-view';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/api/user';
+  private readonly apiUrl = 'http://localhost:8080/api/user';
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
   }
 
   updateProfile(dto: UpdateUserDto): Observable<UserResponseDto> {

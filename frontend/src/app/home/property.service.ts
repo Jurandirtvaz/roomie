@@ -6,8 +6,8 @@ import {environment} from '../../enviroments/enviroment';
   providedIn: 'root'
 })
 export class PropertyService {
-  private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/api/properties`;
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = `${environment.apiUrl}/api/properties`;
 
   buscarComFiltros(filtros: any) {
     let params = new HttpParams();

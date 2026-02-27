@@ -20,9 +20,9 @@ export class MeusImoveis implements OnInit {
   ownerReport: OwnerReportView | null = null;
 
   constructor(
-    private propertyService: PropertyService,
-    private userService: UserService,
-    private auth: Auth
+    private readonly propertyService: PropertyService,
+    private readonly userService: UserService,
+    private readonly auth: Auth
   ) {
   }
 

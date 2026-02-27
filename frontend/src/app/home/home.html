@@ -1,6 +1,5 @@
 <ng-container *ngIf="!hasSearched">
   <div class="hero-container">
-
     <app-header></app-header>
 
     <div class="hero-content">
@@ -22,7 +21,6 @@
 
 <ng-container *ngIf="hasSearched">
   <div class="dashboard-container">
-
     <app-header (logoClicked)="goBackHome()"></app-header>
 
     <div [formGroup]="filterForm" class="search-section">
@@ -41,26 +39,40 @@
       <aside class="sidebar">
         <h3>Filtros</h3>
         <form (ngSubmit)="onFilter()" [formGroup]="filterForm">
-
           <div class="filter-group">
-            <label>Bairro</label>
-            <input formControlName="district" placeholder="Ex: Boa Vista" type="text"/>
+            <label for="filter-district">Bairro</label>
+            <input
+              id="filter-district"
+              formControlName="district"
+              placeholder="Ex: Boa Vista"
+              type="text"
+            />
           </div>
 
           <div class="filter-group price-group">
             <div>
-              <label>Preço Mín.</label>
-              <input formControlName="minPrice" placeholder="R$ 0" type="number"/>
+              <label for="filter-minPrice">Preço Mín.</label>
+              <input
+                id="filter-minPrice"
+                formControlName="minPrice"
+                placeholder="R$ 0"
+                type="number"
+              />
             </div>
             <div>
-              <label>Preço Máx.</label>
-              <input formControlName="maxPrice" placeholder="R$ 2000" type="number"/>
+              <label for="filter-maxPrice">Preço Máx.</label>
+              <input
+                id="filter-maxPrice"
+                formControlName="maxPrice"
+                placeholder="R$ 2000"
+                type="number"
+              />
             </div>
           </div>
 
           <div class="filter-group">
-            <label>Tipo de Imóvel</label>
-            <select formControlName="propertyType">
+            <label for="filter-propertyType">Tipo de Imóvel</label>
+            <select id="filter-propertyType" formControlName="propertyType">
               <option value="">Todos os tipos</option>
               <option value="HOUSE">Casa</option>
               <option value="APARTMENT">Apartamento</option>
@@ -76,15 +88,13 @@
       <section class="results-area">
         <div class="results-header">
           <h2>Resultados da Busca</h2>
-          <p>Mostrando imóveis para: <strong>{{ appliedLocation || 'Qualquer lugar' }}</strong></p>
+          <p>
+            Mostrando imóveis para: <strong>{{ appliedLocation || 'Qualquer lugar' }}</strong>
+          </p>
         </div>
 
-        <app-property-list
-          [loading]="isLoading"
-          [properties]="properties">
-        </app-property-list>
+        <app-property-list [loading]="isLoading" [properties]="properties"> </app-property-list>
       </section>
-
     </div>
   </div>
 </ng-container>

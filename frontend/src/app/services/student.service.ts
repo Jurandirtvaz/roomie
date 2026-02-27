@@ -14,9 +14,9 @@ export interface StudentProfileDto {
   providedIn: 'root'
 })
 export class StudentService {
-  private apiUrl = `${environment.apiUrl}/api/students`;
+  private readonly apiUrl = `${environment.apiUrl}/api/students`;
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
   }
 
   createProfile(dto: StudentProfileDto): Observable<string> {

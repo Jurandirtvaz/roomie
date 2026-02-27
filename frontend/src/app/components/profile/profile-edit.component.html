@@ -18,30 +18,44 @@
   </div>
 
   <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
-
     <div class="form-group">
-      <label>Nome Completo</label>
-      <input formControlName="name" placeholder="Seu nome" type="text">
+      <label for="edit-name">Nome Completo</label>
+      <input id="edit-name" formControlName="name" placeholder="Seu nome" type="text" />
     </div>
 
     <div class="form-group">
-      <label>E-mail</label>
-      <input formControlName="email" placeholder="seuemail@exemplo.com" type="email">
+      <label for="edit-email">E-mail</label>
+      <input
+        id="edit-email"
+        formControlName="email"
+        placeholder="seuemail@exemplo.com"
+        type="email"
+      />
     </div>
 
-    <hr>
+    <hr />
     <h3>Alterar Senha</h3>
     <p class="subtitle">Deixe em branco se não quiser alterar.</p>
 
     <div class="form-row">
       <div class="form-group half">
-        <label>Senha Atual</label>
-        <input formControlName="currentPassword" placeholder="********" type="password">
+        <label for="edit-currentPassword">Senha Atual</label>
+        <input
+          id="edit-currentPassword"
+          formControlName="currentPassword"
+          placeholder="********"
+          type="password"
+        />
       </div>
 
       <div class="form-group half">
-        <label>Nova Senha</label>
-        <input formControlName="newPassword" placeholder="********" type="password">
+        <label for="edit-newPassword">Nova Senha</label>
+        <input
+          id="edit-newPassword"
+          formControlName="newPassword"
+          placeholder="********"
+          type="password"
+        />
       </div>
     </div>
 
@@ -49,6 +63,5 @@
       <span *ngIf="isLoading" class="spinner"></span>
       {{ isLoading ? 'Salvando...' : 'Salvar Alterações' }}
     </button>
-
   </form>
 </div>
