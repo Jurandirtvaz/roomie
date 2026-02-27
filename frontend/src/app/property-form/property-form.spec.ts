@@ -3,7 +3,6 @@ import {PropertyFormComponent} from './property-form';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ActivatedRoute} from '@angular/router';
-import {of} from 'rxjs';
 
 describe('PropertyFormComponent', () => {
   let component: PropertyFormComponent;
