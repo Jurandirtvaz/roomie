@@ -1,12 +1,4 @@
-<div
-  (click)="propertySelected.emit(property)"
-  (keydown.enter)="propertySelected.emit(property)"
-  (keydown.space)="propertySelected.emit(property)"
-  class="card"
-  role="button"
-  tabindex="0"
-  [attr.aria-label]="property.title"
->
+<button (click)="propertySelected.emit(property)" class="card" [attr.aria-label]="property.title">
   <div class="card-image-wrapper">
     <img
       *ngIf="firstPhotoUrl; else noPhoto"
@@ -38,4 +30,4 @@
       <span *ngIf="property.acceptAnimals" class="tag"> Aceita animais </span>
     </div>
   </div>
-</div>
+</button>

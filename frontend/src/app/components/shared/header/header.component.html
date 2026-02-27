@@ -1,15 +1,5 @@
 <header class="topbar-blue">
-  <h2
-    (click)="onLogoClick()"
-    (keydown.enter)="onLogoClick()"
-    (keydown.space)="onLogoClick()"
-    class="logo-text"
-    tabindex="0"
-    title="Início"
-    role="button"
-  >
-    Roomie
-  </h2>
+  <button (click)="onLogoClick()" class="logo-text" title="Início">Roomie</button>
 
   <div class="header-buttons">
     <button (click)="goToCreateProperty()" *ngIf="showCreateProperty" class="outline-btn">
@@ -49,29 +39,29 @@
 
         <hr aria-hidden="true" />
 
-        <ul role="presentation">
-          <li role="presentation">
+        <ul>
+          <li>
             <button (click)="goToProfile()" class="dropdown-menu-item" role="menuitem">
               <span aria-hidden="true" class="material-icons">person_outline</span>
               Minha conta
             </button>
           </li>
 
-          <li role="presentation">
+          <li>
             <button class="dropdown-menu-item" role="menuitem">
               <span aria-hidden="true" class="material-icons">favorite_border</span>
               Favoritos
             </button>
           </li>
 
-          <li role="presentation">
+          <li>
             <button (click)="goToCreateProperty()" class="dropdown-menu-item" role="menuitem">
               <span aria-hidden="true" class="material-icons">add_circle_outline</span>
               Cadastrar Imóvel
             </button>
           </li>
 
-          <li role="presentation">
+          <li>
             <button (click)="goToMyProperties()" class="dropdown-menu-item" role="menuitem">
               <span aria-hidden="true" class="material-icons">home_work</span>
               Meus Imóveis
@@ -79,16 +69,16 @@
           </li>
 
           <!-- Visível apenas para não-administradores -->
-          <li *ngIf="user.role !== 'ADMIN'" role="presentation">
+          <li *ngIf="user.role !== 'ADMIN'">
             <button (click)="goToStudentProfile()" class="dropdown-menu-item" role="menuitem">
               <span aria-hidden="true" class="material-icons">school</span>
               Minha Instituição
             </button>
           </li>
 
-          <hr aria-hidden="true" role="presentation" />
+          <hr aria-hidden="true" />
 
-          <li role="presentation">
+          <li>
             <button (click)="onLogout()" class="dropdown-menu-item logout-item" role="menuitem">
               <span aria-hidden="true" class="material-icons">logout</span>
               Sair
