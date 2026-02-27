@@ -26,7 +26,8 @@ export class PropertyDetail {
 
   get selectedPhotoUrl(): string | null {
     if (this.photos.length > 0) {
-      return this.apiBase + this.photos[this.selectedPhotoIndex].path;
+      const path = this.photos[this.selectedPhotoIndex].path;
+      return path.startsWith('http') ? path : this.apiBase + path;
     }
     return null;
   }
