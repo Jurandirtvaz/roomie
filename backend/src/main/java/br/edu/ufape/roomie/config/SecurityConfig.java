@@ -25,6 +25,7 @@ public class SecurityConfig {
     private SecurityFilter securityFilter;
 
     @Bean
+    @SuppressWarnings("java:S4502") // CSRF is intentionally disabled: stateless JWT-based API, no cookie/session auth
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
@@ -37,8 +38,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/properties").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/properties/details").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/properties/{id}/details").permitAll()
-                        .requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/health").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/health").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

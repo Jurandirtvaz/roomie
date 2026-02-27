@@ -16,10 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
@@ -34,16 +34,13 @@ public class RoomieDataSeeder implements CommandLineRunner {
     @Transactional
     public void run(String... args) {
         if (userRepository.count() == 0) {
-            System.out.println("Banco de dados vazio. Iniciando povoamento...");
             seedDatabase();
-        } else {
-            System.out.println("Banco já contém dados. Povoamento ignorado.");
         }
     }
 
     private void seedDatabase() {
         Faker faker = new Faker(Locale.of("pt", "BR"));
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
 
         String defaultPassword = passwordEncoder.encode("123456");
 
