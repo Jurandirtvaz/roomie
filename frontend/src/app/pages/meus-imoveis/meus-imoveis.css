@@ -48,7 +48,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #0D83D7;
+  background: #0a6ab5;
   color: #fff;
   padding: 10px 20px;
   border-radius: 8px;
@@ -60,7 +60,7 @@
   transition: background 0.2s;
 }
 
-.btn-new:hover { background: #0a6ab5; }
+.btn-new:hover { background: #085a9a; }
 .btn-new .material-icons { font-size: 18px; }
 
 /* ── Stats ── */
@@ -89,8 +89,8 @@
 .stat-card:hover { transform: translateY(-2px); }
 
 .stat-card.highlight {
-  background: #0D83D7;
-  border-color: #0D83D7;
+  background: #0a6ab5;
+  border-color: #0a6ab5;
 }
 
 .stat-card.highlight .stat-icon,
@@ -236,7 +236,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #0D83D7;
+  background: #0a6ab5;
   color: #fff;
   border: none;
   padding: 9px 18px;
@@ -249,7 +249,7 @@
   transition: background 0.2s;
 }
 
-.btn-publish:hover { background: #0a6ab5; }
+.btn-publish:hover { background: #085a9a; }
 .btn-publish .material-icons { font-size: 17px; }
 
 .published-badge,
