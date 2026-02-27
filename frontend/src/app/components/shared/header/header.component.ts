@@ -1,26 +1,33 @@
-import {Component, ElementRef, EventEmitter, HostListener, inject, Input, Output} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {Router} from '@angular/router';
-import {Auth} from '../../../auth/auth';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  inject,
+  Input,
+  Output,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { Auth } from '../../../auth/auth';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
   /** Exibe o botão "Cadastrar Imóvel" ao lado do avatar */
   @Input() showCreateProperty = true;
 
-
   @Output() logoClicked = new EventEmitter<void>();
   isMenuOpen = false;
-  private auth = inject(Auth);
+  private readonly auth = inject(Auth);
   user$ = this.auth.currentUser$;
-  private router = inject(Router);
-  private elRef = inject(ElementRef);
+  private readonly router = inject(Router);
+  private readonly elRef = inject(ElementRef);
 
   /** Fecha o menu ao clicar fora do componente */
   @HostListener('document:click', ['$event'])
@@ -92,10 +99,10 @@ export class HeaderComponent {
    * Handles empty / whitespace-only names gracefully.
    */
   getInitials(name: string): string {
-    if (!name || !name.trim()) return 'U';
+    if (!name?.trim()) return 'U';
     const names = name.trim().split(' ');
     if (names.length === 1) return names[0].charAt(0).toUpperCase();
-    return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
+    return (names[0].charAt(0) + names.at(-1)!.charAt(0)).toUpperCase();
   }
 
   onLogoClick(): void {
@@ -134,7 +141,7 @@ export class HeaderComponent {
 
   private getMenuItems(): HTMLElement[] {
     return Array.from(
-      this.elRef.nativeElement.querySelectorAll('[role="menuitem"]')
+      this.elRef.nativeElement.querySelectorAll('[role="menuitem"]'),
     ) as HTMLElement[];
   }
 
@@ -146,5 +153,3 @@ export class HeaderComponent {
     });
   }
 }
-
-

@@ -30,6 +30,9 @@
         <java.version>25</java.version>
         <tomcat.version>11.0.18</tomcat.version>
         <assertj.version>3.27.7</assertj.version>
+        <sonar.organization>mocogroup</sonar.organization>
+        <sonar.projectKey>MocoGroup_roomie</sonar.projectKey>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
     <dependencies>
         <dependency>

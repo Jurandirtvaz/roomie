@@ -9,10 +9,10 @@ import {environment} from '../../enviroments/enviroment';
   providedIn: 'root'
 })
 export class Auth {
-  private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/auth`;
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = `${environment.apiUrl}/auth`;
 
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {
@@ -58,6 +58,7 @@ export class Auth {
 
       return true;
     } catch (e) {
+      console.error(e);
       this.logout();
       return false;
     }
@@ -100,6 +101,7 @@ export class Auth {
         role: decoded.role as UserRole
       });
     } catch (e) {
+      console.error(e);
       this.logout();
     }
   }

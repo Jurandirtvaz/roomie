@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: linear-gradient(135deg, #0D83D7 0%, #0a66a8 100%);
+  background: linear-gradient(135deg, #005fa3 0%, #004d87 100%);
   color: white;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .big-search-box .btn-big-search {
-  background-color: #0D83D7;
+  background-color: #005fa3;
   color: white;
   border: none;
   padding: 15px 40px;
@@ -111,12 +111,12 @@
 }
 
 .search-bar input:focus {
-  border-color: #0D83D7;
+  border-color: #0d83d7;
 }
 
 .search-bar .btn-search {
   padding: 12px 25px;
-  background-color: #0D83D7;
+  background-color: #005fa3;
   border: none;
   border-radius: 0 25px 25px 0;
   color: white;
@@ -179,7 +179,7 @@
 .filter-group input:focus,
 .filter-group select:focus {
   background-color: #fff;
-  border-color: #0D83D7;
+  border-color: #0d83d7;
 }
 
 .price-group {
@@ -196,7 +196,7 @@
 .btn-filter {
   width: 100%;
   padding: 12px;
-  background-color: #0D83D7;
+  background-color: #005fa3;
   color: white;
   border: none;
   border-radius: 8px;
@@ -227,4 +227,3 @@
   color: #666;
   margin-bottom: 30px;
 }
-

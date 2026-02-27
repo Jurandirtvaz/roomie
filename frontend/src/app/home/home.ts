@@ -19,9 +19,9 @@ export class Home implements OnInit {
   properties: any[] = [];
   isLoading: boolean = false;
   initialSearch = new FormControl('');
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly fb = inject(FormBuilder);
   filterForm: FormGroup = this.fb.group({
     location: [''],
     district: [''],
@@ -29,8 +29,8 @@ export class Home implements OnInit {
     maxPrice: [''],
     propertyType: ['']
   });
-  private propertyService = inject(PropertyService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly propertyService = inject(PropertyService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

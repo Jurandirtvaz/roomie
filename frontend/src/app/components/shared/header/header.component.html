@@ -1,5 +1,15 @@
 <header class="topbar-blue">
-  <h2 (click)="onLogoClick()" class="logo-text" title="Início">Roomie</h2>
+  <h2
+    (click)="onLogoClick()"
+    (keydown.enter)="onLogoClick()"
+    (keydown.space)="onLogoClick()"
+    class="logo-text"
+    tabindex="0"
+    title="Início"
+    role="button"
+  >
+    Roomie
+  </h2>
 
   <div class="header-buttons">
     <button (click)="goToCreateProperty()" *ngIf="showCreateProperty" class="outline-btn">
@@ -37,48 +47,54 @@
           </div>
         </div>
 
-        <hr aria-hidden="true">
+        <hr aria-hidden="true" />
 
-        <ul role="none">
-          <li (click)="goToProfile()" (keydown.enter)="goToProfile()" (keydown.space)="goToProfile()" role="menuitem"
-              tabindex="0">
-            <span aria-hidden="true" class="material-icons">person_outline</span>
-            Minha conta
+        <ul role="presentation">
+          <li role="presentation">
+            <button (click)="goToProfile()" class="dropdown-menu-item" role="menuitem">
+              <span aria-hidden="true" class="material-icons">person_outline</span>
+              Minha conta
+            </button>
           </li>
 
-          <li role="menuitem" tabindex="0">
-            <span aria-hidden="true" class="material-icons">favorite_border</span>
-            Favoritos
+          <li role="presentation">
+            <button class="dropdown-menu-item" role="menuitem">
+              <span aria-hidden="true" class="material-icons">favorite_border</span>
+              Favoritos
+            </button>
           </li>
 
-          <li (click)="goToCreateProperty()" (keydown.enter)="goToCreateProperty()" (keydown.space)="goToCreateProperty()" role="menuitem"
-              tabindex="0">
-            <span aria-hidden="true" class="material-icons">add_circle_outline</span>
-            Cadastrar Imóvel
+          <li role="presentation">
+            <button (click)="goToCreateProperty()" class="dropdown-menu-item" role="menuitem">
+              <span aria-hidden="true" class="material-icons">add_circle_outline</span>
+              Cadastrar Imóvel
+            </button>
           </li>
 
-          <li (click)="goToMyProperties()" (keydown.enter)="goToMyProperties()" (keydown.space)="goToMyProperties()" role="menuitem"
-              tabindex="0">
-            <span aria-hidden="true" class="material-icons">home_work</span>
-            Meus Imóveis
+          <li role="presentation">
+            <button (click)="goToMyProperties()" class="dropdown-menu-item" role="menuitem">
+              <span aria-hidden="true" class="material-icons">home_work</span>
+              Meus Imóveis
+            </button>
           </li>
 
           <!-- Visível apenas para não-administradores -->
-          <li (click)="goToStudentProfile()" (keydown.enter)="goToStudentProfile()" (keydown.space)="goToStudentProfile()" *ngIf="user.role !== 'ADMIN'"
-              role="menuitem" tabindex="0">
-            <span aria-hidden="true" class="material-icons">school</span>
-            Minha Instituição
+          <li *ngIf="user.role !== 'ADMIN'" role="presentation">
+            <button (click)="goToStudentProfile()" class="dropdown-menu-item" role="menuitem">
+              <span aria-hidden="true" class="material-icons">school</span>
+              Minha Instituição
+            </button>
           </li>
 
-          <hr aria-hidden="true" role="none">
+          <hr aria-hidden="true" role="presentation" />
 
-          <li (click)="onLogout()" (keydown.enter)="onLogout()" (keydown.space)="onLogout()" class="logout-item" role="menuitem"
-              tabindex="0">
-            <span aria-hidden="true" class="material-icons">logout</span>
-            Sair
+          <li role="presentation">
+            <button (click)="onLogout()" class="dropdown-menu-item logout-item" role="menuitem">
+              <span aria-hidden="true" class="material-icons">logout</span>
+              Sair
+            </button>
           </li>
         </ul>
-
       </div>
     </div>
   </div>

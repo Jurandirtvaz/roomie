@@ -10,9 +10,9 @@ import {environment} from '../../enviroments/enviroment';
   providedIn: 'root',
 })
 export class PropertyService {
-  private apiUrl = `${environment.apiUrl}/api/properties`;
+  private readonly apiUrl = `${environment.apiUrl}/api/properties`;
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
   }
 
   getAll(): Observable<Property[]> {

@@ -10,7 +10,7 @@ import {CommonModule} from '@angular/common';
   styleUrl: './unauthorized.css'
 })
 export class Unauthorized {
-  constructor(private router: Router) {
+  constructor(private readonly router: Router) {
   }
 
   goBack() {

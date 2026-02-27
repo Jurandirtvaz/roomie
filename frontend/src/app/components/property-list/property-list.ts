@@ -21,8 +21,8 @@ export class PropertyList {
   selectedProperty: Property | null = null;
   selectedDetail: PropertyDetailView | null = null;
 
-  private propertyService = inject(PropertyService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly propertyService = inject(PropertyService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   openDetail(property: Property): void {
     this.selectedProperty = property;

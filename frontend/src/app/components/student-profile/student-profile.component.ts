@@ -27,11 +27,11 @@ export class StudentProfileComponent implements OnInit {
   phonesSuccess = '';
   phonesError = '';
 
-  private fb = inject(FormBuilder);
-  private auth = inject(Auth);
-  private studentService = inject(StudentService);
-  private userService = inject(UserService);
-  private router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly auth = inject(Auth);
+  private readonly studentService = inject(StudentService);
+  private readonly userService = inject(UserService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.studentForm = this.fb.group({
