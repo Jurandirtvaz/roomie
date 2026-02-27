@@ -14,9 +14,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
+
+    private static final Logger logger = Logger.getLogger(SecurityFilter.class.getName());
 
     @Autowired
     private TokenService tokenService;
@@ -34,7 +37,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.replace("Bearer ", "");
             String email = tokenService.validateToken(token);
-            System.out.println("Email do token: " + email);
+            logger.fine(() -> "Email do token: " + email);
 
 
             if (email != null && !email.isBlank()) {
