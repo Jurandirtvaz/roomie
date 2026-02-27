@@ -1,5 +1,6 @@
 package br.edu.ufape.roomie.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class Hobby {
     @Column(name = "id_hobby")
     private Long idHobby;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_habito", nullable = false)
     private Habit habit;
