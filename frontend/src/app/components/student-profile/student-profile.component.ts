@@ -1,12 +1,12 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Auth } from '../../auth/auth';
-import { StudentService } from '../../services/student.service';
-import { UserService } from '../../services/user.service';
-import { HeaderComponent } from '../shared/header/header.component';
-import { take } from 'rxjs';
+import {Component, inject, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {Auth} from '../../auth/auth';
+import {StudentService} from '../../services/student.service';
+import {UserService} from '../../services/user.service';
+import {HeaderComponent} from '../shared/header/header.component';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'app-student-profile',
@@ -54,7 +54,8 @@ export class StudentProfileComponent implements OnInit {
             ? contact.telefones.split(',').map(p => p.trim()).filter(Boolean)
             : [];
         },
-        error: () => { /* estudante ainda não tem perfil */ }
+        error: () => { /* estudante ainda não tem perfil */
+        }
       });
     });
   }
@@ -136,7 +137,7 @@ export class StudentProfileComponent implements OnInit {
     this.phonesSuccess = '';
     this.phonesError = '';
 
-    this.userService.updateProfile({ phones: this.phones }).subscribe({
+    this.userService.updateProfile({phones: this.phones}).subscribe({
       next: () => {
         this.isSavingPhones = false;
         this.phonesSuccess = 'Telefones salvos com sucesso!';

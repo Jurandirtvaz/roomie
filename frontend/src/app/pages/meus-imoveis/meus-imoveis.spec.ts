@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { MeusImoveis } from './meus-imoveis';
-import { PropertyService } from '../../services/propertyService';
-import { of } from 'rxjs';
+import {MeusImoveis} from './meus-imoveis';
+import {PropertyService} from '../../services/propertyService';
+import {of} from 'rxjs';
 
 describe('MeusImoveis', () => {
   let component: MeusImoveis;
@@ -17,10 +17,10 @@ describe('MeusImoveis', () => {
     await TestBed.configureTestingModule({
       imports: [MeusImoveis],
       providers: [
-        { provide: PropertyService, useValue: mockPropertyService }
+        {provide: PropertyService, useValue: mockPropertyService}
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(MeusImoveis);
     component = fixture.componentInstance;

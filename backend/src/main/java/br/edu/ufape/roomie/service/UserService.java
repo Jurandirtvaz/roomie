@@ -20,12 +20,12 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User updateProfile(Long userId, UpdateUserDTO dto){
+    public User updateProfile(Long userId, UpdateUserDTO dto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Usuário não encontrado!"));
 
-        if(dto.getName() != null && !dto.getName().isBlank()){
+        if (dto.getName() != null && !dto.getName().isBlank()) {
             user.setName(dto.getName());
         }
 

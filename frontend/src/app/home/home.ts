@@ -1,10 +1,10 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, FormControl } from '@angular/forms';
-import { PropertyService } from './property.service';
-import { PropertyList } from '../components/property-list/property-list';
-import { HeaderComponent } from '../components/shared/header/header.component';
+import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {PropertyService} from './property.service';
+import {PropertyList} from '../components/property-list/property-list';
+import {HeaderComponent} from '../components/shared/header/header.component';
 
 @Component({
   selector: 'app-home',
@@ -14,21 +14,14 @@ import { HeaderComponent } from '../components/shared/header/header.component';
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
+  hasSearched: boolean = false;
+  appliedLocation: string = '';
+  properties: any[] = [];
+  isLoading: boolean = false;
+  initialSearch = new FormControl('');
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
-
-  private propertyService = inject(PropertyService);
-  private cdr = inject(ChangeDetectorRef);
-
-  hasSearched: boolean = false;
-  appliedLocation: string = '';
-
-  properties: any[] = [];
-  isLoading: boolean = false;
-
-  initialSearch = new FormControl('');
-
   filterForm: FormGroup = this.fb.group({
     location: [''],
     district: [''],
@@ -36,12 +29,14 @@ export class Home implements OnInit {
     maxPrice: [''],
     propertyType: ['']
   });
+  private propertyService = inject(PropertyService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (Object.keys(params).length > 0) {
         this.hasSearched = true;
-        this.filterForm.patchValue(params, { emitEvent: false });
+        this.filterForm.patchValue(params, {emitEvent: false});
         this.appliedLocation = params['location'] || '';
         this.onFilter();
       }
@@ -50,7 +45,7 @@ export class Home implements OnInit {
 
   onInitialSearch() {
     if (this.initialSearch.value) {
-      this.filterForm.patchValue({ location: this.initialSearch.value });
+      this.filterForm.patchValue({location: this.initialSearch.value});
     }
     this.hasSearched = true;
     this.onFilter();

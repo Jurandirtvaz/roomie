@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Property } from '../../models/property';
-import { environment } from '../../../enviroments/enviroment';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Property} from '../../models/property';
+import {environment} from '../../../enviroments/enviroment';
 
 @Component({
   selector: 'app-property-card',

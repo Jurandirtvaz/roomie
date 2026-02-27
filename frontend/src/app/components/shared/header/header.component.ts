@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, HostListener, ElementRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { Auth } from '../../../auth/auth';
+import {Component, ElementRef, EventEmitter, HostListener, inject, Input, Output} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
+import {Auth} from '../../../auth/auth';
 
 @Component({
   selector: 'app-header',
@@ -16,13 +16,11 @@ export class HeaderComponent {
 
 
   @Output() logoClicked = new EventEmitter<void>();
-
+  isMenuOpen = false;
   private auth = inject(Auth);
+  user$ = this.auth.currentUser$;
   private router = inject(Router);
   private elRef = inject(ElementRef);
-
-  user$ = this.auth.currentUser$;
-  isMenuOpen = false;
 
   /** Fecha o menu ao clicar fora do componente */
   @HostListener('document:click', ['$event'])
@@ -90,20 +88,6 @@ export class HeaderComponent {
     }
   }
 
-  private getMenuItems(): HTMLElement[] {
-    return Array.from(
-      this.elRef.nativeElement.querySelectorAll('[role="menuitem"]')
-    ) as HTMLElement[];
-  }
-
-  private focusMenuItem(index: number): void {
-    // Aguarda o DOM renderizar antes de focar
-    setTimeout(() => {
-      const items = this.getMenuItems();
-      items[index]?.focus();
-    });
-  }
-
   /**
    * Handles empty / whitespace-only names gracefully.
    */
@@ -146,6 +130,20 @@ export class HeaderComponent {
     this.isMenuOpen = false;
     this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  private getMenuItems(): HTMLElement[] {
+    return Array.from(
+      this.elRef.nativeElement.querySelectorAll('[role="menuitem"]')
+    ) as HTMLElement[];
+  }
+
+  private focusMenuItem(index: number): void {
+    // Aguarda o DOM renderizar antes de focar
+    setTimeout(() => {
+      const items = this.getMenuItems();
+      items[index]?.focus();
+    });
   }
 }
 

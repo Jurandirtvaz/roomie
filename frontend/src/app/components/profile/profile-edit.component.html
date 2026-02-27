@@ -4,29 +4,29 @@
   <h2>Editar Perfil</h2>
   <p class="subtitle">Mantenha seus dados atualizados no Roomie.</p>
 
-  <div class="alert success" *ngIf="successMessage">
+  <div *ngIf="successMessage" class="alert success">
     <span class="material-icons">check_circle</span> {{ successMessage }}
   </div>
-  <div class="alert error" *ngIf="errorMessage">
+  <div *ngIf="errorMessage" class="alert error">
     <span class="material-icons">error</span> {{ errorMessage }}
   </div>
 
   <!-- Aviso de servidor lento (ex: Render cold start) -->
-  <div class="alert slow" *ngIf="slowRequest">
+  <div *ngIf="slowRequest" class="alert slow">
     <span class="material-icons">hourglass_top</span>
     O servidor está acordando, aguarde mais alguns segundos...
   </div>
 
-  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
 
     <div class="form-group">
       <label>Nome Completo</label>
-      <input type="text" formControlName="name" placeholder="Seu nome">
+      <input formControlName="name" placeholder="Seu nome" type="text">
     </div>
 
     <div class="form-group">
       <label>E-mail</label>
-      <input type="email" formControlName="email" placeholder="seuemail@exemplo.com">
+      <input formControlName="email" placeholder="seuemail@exemplo.com" type="email">
     </div>
 
     <hr>
@@ -36,17 +36,17 @@
     <div class="form-row">
       <div class="form-group half">
         <label>Senha Atual</label>
-        <input type="password" formControlName="currentPassword" placeholder="********">
+        <input formControlName="currentPassword" placeholder="********" type="password">
       </div>
 
       <div class="form-group half">
         <label>Nova Senha</label>
-        <input type="password" formControlName="newPassword" placeholder="********">
+        <input formControlName="newPassword" placeholder="********" type="password">
       </div>
     </div>
 
-    <button type="submit" class="btn-save" [disabled]="isLoading">
-      <span class="spinner" *ngIf="isLoading"></span>
+    <button [disabled]="isLoading" class="btn-save" type="submit">
+      <span *ngIf="isLoading" class="spinner"></span>
       {{ isLoading ? 'Salvando...' : 'Salvar Alterações' }}
     </button>
 

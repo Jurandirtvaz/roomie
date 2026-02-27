@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Property } from '../../models/property';
-import { PropertyDetailView } from '../../models/property-detail-view';
-import { environment } from '../../../enviroments/enviroment';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Property} from '../../models/property';
+import {PropertyDetailView} from '../../models/property-detail-view';
+import {environment} from '../../../enviroments/enviroment';
 
 @Component({
   selector: 'app-property-detail',

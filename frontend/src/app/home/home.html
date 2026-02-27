@@ -9,12 +9,12 @@
 
       <div class="big-search-box">
         <input
-          type="text"
+          (keyup.enter)="onInitialSearch()"
           [formControl]="initialSearch"
           placeholder="Para qual cidade ou bairro você vai?"
-          (keyup.enter)="onInitialSearch()"
+          type="text"
         />
-        <button class="btn-big-search" (click)="onInitialSearch()">Buscar</button>
+        <button (click)="onInitialSearch()" class="btn-big-search">Buscar</button>
       </div>
     </div>
   </div>
@@ -25,36 +25,36 @@
 
     <app-header (logoClicked)="goBackHome()"></app-header>
 
-    <div class="search-section" [formGroup]="filterForm">
+    <div [formGroup]="filterForm" class="search-section">
       <div class="search-bar">
         <input
-          type="text"
+          (keyup.enter)="onFilter()"
           formControlName="location"
           placeholder="Buscar por cidade..."
-          (keyup.enter)="onFilter()"
+          type="text"
         />
-        <button class="btn-search" (click)="onFilter()">Buscar</button>
+        <button (click)="onFilter()" class="btn-search">Buscar</button>
       </div>
     </div>
 
     <div class="main-content">
       <aside class="sidebar">
         <h3>Filtros</h3>
-        <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+        <form (ngSubmit)="onFilter()" [formGroup]="filterForm">
 
           <div class="filter-group">
             <label>Bairro</label>
-            <input type="text" formControlName="district" placeholder="Ex: Boa Vista" />
+            <input formControlName="district" placeholder="Ex: Boa Vista" type="text"/>
           </div>
 
           <div class="filter-group price-group">
             <div>
               <label>Preço Mín.</label>
-              <input type="number" formControlName="minPrice" placeholder="R$ 0" />
+              <input formControlName="minPrice" placeholder="R$ 0" type="number"/>
             </div>
             <div>
               <label>Preço Máx.</label>
-              <input type="number" formControlName="maxPrice" placeholder="R$ 2000" />
+              <input formControlName="maxPrice" placeholder="R$ 2000" type="number"/>
             </div>
           </div>
 
@@ -69,7 +69,7 @@
             </select>
           </div>
 
-          <button type="button" class="btn-filter" (click)="onFilter()">Aplicar Filtros</button>
+          <button (click)="onFilter()" class="btn-filter" type="button">Aplicar Filtros</button>
         </form>
       </aside>
 
@@ -80,8 +80,8 @@
         </div>
 
         <app-property-list
-           [properties]="properties"
-           [loading]="isLoading">
+          [loading]="isLoading"
+          [properties]="properties">
         </app-property-list>
       </section>
 

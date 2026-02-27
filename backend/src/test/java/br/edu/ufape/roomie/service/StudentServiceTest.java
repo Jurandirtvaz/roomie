@@ -48,7 +48,7 @@ public class StudentServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(ResponseStatusException.class, () -> {
-           studentService.promoteUserToStudent(99L, "Curso", "Inst");
+            studentService.promoteUserToStudent(99L, "Curso", "Inst");
         });
 
         verify(studentRepository, never()).promoteUserToStudent(anyLong(), anyString(), anyString());
@@ -62,7 +62,7 @@ public class StudentServiceTest {
         user.setId(userId);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(studentRepository.updateStudentProfile(anyLong(),anyString(),anyString())).thenReturn(1);
+        when(studentRepository.updateStudentProfile(anyLong(), anyString(), anyString())).thenReturn(1);
 
         studentService.updateStudentProfile(userId, "Curso", "Inst");
         verify(studentRepository, times(1)).updateStudentProfile(userId, "Curso", "Inst");

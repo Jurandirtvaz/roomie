@@ -61,9 +61,19 @@
   font-weight: 500;
 }
 
-.alert .material-icons { font-size: 20px; }
-.alert.success { background: #e8f5e9; color: #2e7d32; }
-.alert.error   { background: #fdecea; color: #c62828; }
+.alert .material-icons {
+  font-size: 20px;
+}
+
+.alert.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.alert.error {
+  background: #fdecea;
+  color: #c62828;
+}
 
 /* Grupos de formulário */
 .form-group {
