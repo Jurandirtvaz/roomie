@@ -43,14 +43,17 @@ jobs:
           distribution: "temurin"
           cache: maven
 
-      - name: Compile and test with Maven
-        working-directory: ./backend
-        run: mvn clean verify -Dspring.profiles.active=test
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
-      - name: Analyze with SonarCloud
+      - name: Build, test and analyze with SonarCloud
         continue-on-error: true
         working-directory: ./backend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar -Dspring.profiles.active=test -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
