@@ -140,7 +140,9 @@ export class HeaderComponent {
   }
 
   private getMenuItems(): HTMLElement[] {
-    return Array.from(this.elRef.nativeElement.querySelectorAll<HTMLElement>('[role="menuitem"]'));
+    return Array.from(
+      this.elRef.nativeElement.querySelectorAll('[role="menuitem"]'),
+    ) as HTMLElement[];
   }
 
   private focusMenuItem(index: number): void {
