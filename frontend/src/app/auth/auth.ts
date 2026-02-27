@@ -1,9 +1,9 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { jwtDecode } from 'jwt-decode';
-import { LoginResponse, User, UserRole, RegisterData } from './user.interface';
-import { environment } from '../../enviroments/enviroment';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable, tap} from 'rxjs';
+import {jwtDecode} from 'jwt-decode';
+import {LoginResponse, RegisterData, User, UserRole} from './user.interface';
+import {environment} from '../../enviroments/enviroment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class Auth {
     this.checkToken();
   }
 
-  login(credentials: {email: string, password: string}): Observable<LoginResponse> {
+  login(credentials: { email: string, password: string }): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
 
@@ -78,7 +78,7 @@ export class Auth {
   updateCurrentUser(updates: Partial<User>): void {
     const current = this.currentUserSubject.value;
     if (current) {
-      this.currentUserSubject.next({ ...current, ...updates });
+      this.currentUserSubject.next({...current, ...updates});
     }
   }
 

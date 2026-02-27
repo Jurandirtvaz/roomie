@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PropertyService } from '../../services/propertyService';
-import { UserService } from '../../services/user.service';
-import { Auth } from '../../auth/auth';
-import { Property } from '../../models/property';
-import { OwnerReportView } from '../../models/owner-report-view';
-import { take } from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {PropertyService} from '../../services/propertyService';
+import {UserService} from '../../services/user.service';
+import {Auth} from '../../auth/auth';
+import {Property} from '../../models/property';
+import {OwnerReportView} from '../../models/owner-report-view';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'app-meus-imoveis',
@@ -23,7 +23,8 @@ export class MeusImoveis implements OnInit {
     private propertyService: PropertyService,
     private userService: UserService,
     private auth: Auth
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadProperties();

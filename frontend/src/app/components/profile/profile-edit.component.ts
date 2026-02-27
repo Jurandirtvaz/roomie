@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { UserService } from '../../services/user.service';
-import { UpdateUserDto } from '../../models/user/update-user.dto';
-import { HeaderComponent } from '../shared/header/header.component';
-import { Auth } from '../../auth/auth';
-import { take } from 'rxjs';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {UserService} from '../../services/user.service';
+import {UpdateUserDto} from '../../models/user/update-user.dto';
+import {HeaderComponent} from '../shared/header/header.component';
+import {Auth} from '../../auth/auth';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'app-profile-edit',
@@ -54,7 +54,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     // Validação client-side: nova senha exige senha atual
-    const { newPassword, currentPassword } = this.profileForm.value;
+    const {newPassword, currentPassword} = this.profileForm.value;
     if (newPassword && !currentPassword) {
       this.errorMessage = 'Informe sua senha atual para definir uma nova senha.';
       return;

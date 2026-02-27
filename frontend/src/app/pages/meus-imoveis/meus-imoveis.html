@@ -1,7 +1,7 @@
 <h2>Meus Imóveis</h2>
 
 <!-- Painel de estatísticas do proprietário -->
-<div class="stats-panel" *ngIf="ownerReport">
+<div *ngIf="ownerReport" class="stats-panel">
   <div class="stat-card">
     <span class="stat-label">Imóveis cadastrados</span>
     <span class="stat-value">{{ ownerReport.totalImoveis }}</span>
@@ -34,8 +34,8 @@
   <p>Status: {{ property.status }}</p>
 
   <button
-    *ngIf="property.status === 'DRAFT'"
-    (click)="publish(property.id)">
+    (click)="publish(property.id)"
+    *ngIf="property.status === 'DRAFT'">
     Publicar
   </button>
 </div>

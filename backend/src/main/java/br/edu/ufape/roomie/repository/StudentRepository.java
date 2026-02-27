@@ -29,8 +29,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     int updateStudentProfile(@Param("id") Long id, @Param("major") String major, @Param("institution") String institution);
 
     List<Student> findByInstitution(String institution);
+
     List<Student> findByMajor(String major);
 
     Optional<Student> findByEmail(String email);
+
     Optional<Student> findByCpf(String cpf);
 }

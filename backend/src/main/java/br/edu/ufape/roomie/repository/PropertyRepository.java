@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -38,12 +39,13 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             "AND (:type = '[ALL]' OR CAST(p.tipo AS VARCHAR) = :type) ",
             nativeQuery = true)
     List<Property> findWithFilters(
-        @Param("location") String location,
-        @Param("district") String district,
-        @Param("minPrice") double minPrice,
-        @Param("maxPrice") double maxPrice,
-        @Param("type") String type
+            @Param("location") String location,
+            @Param("district") String district,
+            @Param("minPrice") double minPrice,
+            @Param("maxPrice") double maxPrice,
+            @Param("type") String type
     );
+
     List<Property> findByOwner(User owner);
 
 }

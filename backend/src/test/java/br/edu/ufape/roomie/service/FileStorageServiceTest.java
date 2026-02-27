@@ -7,7 +7,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -16,10 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FileStorageServiceTest {
 
-    private FileStorageService fileStorageService;
-
     @TempDir
     Path tempDir;
+    private FileStorageService fileStorageService;
 
     @BeforeEach
     void setUp() {

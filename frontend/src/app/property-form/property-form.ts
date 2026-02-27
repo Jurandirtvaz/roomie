@@ -1,10 +1,10 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { PropertyType } from '../models/property-type.enum';
-import { PropertyService } from '../services/propertyService';
-import { HeaderComponent } from '../components/shared/header/header.component';
+import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
+import {PropertyType} from '../models/property-type.enum';
+import {PropertyService} from '../services/propertyService';
+import {HeaderComponent} from '../components/shared/header/header.component';
 
 @Component({
   selector: 'app-property-form',
@@ -97,7 +97,7 @@ export class PropertyFormComponent implements OnInit {
           this.submitSuccess = true;
           this.submitError = '';
           this.isSubmitting = false;
-          setTimeout(() => this.router.navigate(['/home'], { queryParams: { from: 'create' } }), 1500);
+          setTimeout(() => this.router.navigate(['/home'], {queryParams: {from: 'create'}}), 1500);
         },
         error: (err) => {
           console.error('Erro ao salvar imóvel:', err);
@@ -114,12 +114,18 @@ export class PropertyFormComponent implements OnInit {
 
   getLabelForType(type: string): string {
     switch (type) {
-      case PropertyType.HOUSE: return 'Casa';
-      case PropertyType.APARTMENT: return 'Apartamento';
-      case PropertyType.STUDIO: return 'Studio';
-      case PropertyType.ROOM: return 'Quarto';
-      case PropertyType.DORMITORY: return 'República';
-      default: return type;
+      case PropertyType.HOUSE:
+        return 'Casa';
+      case PropertyType.APARTMENT:
+        return 'Apartamento';
+      case PropertyType.STUDIO:
+        return 'Studio';
+      case PropertyType.ROOM:
+        return 'Quarto';
+      case PropertyType.DORMITORY:
+        return 'República';
+      default:
+        return type;
     }
   }
 }

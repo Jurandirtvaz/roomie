@@ -135,8 +135,8 @@ class PropertyControllerTest {
         );
 
         mvc.perform(multipart("/api/properties")
-                .file(dataPart)
-                .contentType(MediaType.MULTIPART_FORM_DATA))
+                        .file(dataPart)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isBadRequest());
     }
 }

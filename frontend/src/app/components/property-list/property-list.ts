@@ -1,10 +1,10 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Property } from '../../models/property';
-import { PropertyDetailView } from '../../models/property-detail-view';
-import { PropertyCard } from '../property-card/property-card';
-import { PropertyDetail } from '../property-detail/property-detail';
-import { PropertyService } from '../../services/propertyService';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Property} from '../../models/property';
+import {PropertyDetailView} from '../../models/property-detail-view';
+import {PropertyCard} from '../property-card/property-card';
+import {PropertyDetail} from '../property-detail/property-detail';
+import {PropertyService} from '../../services/propertyService';
 
 @Component({
   selector: 'app-property-list',
@@ -32,7 +32,8 @@ export class PropertyList {
         this.selectedDetail = detail;
         this.cdr.detectChanges();
       },
-      error: () => { /* mantém selectedDetail null */ }
+      error: () => { /* mantém selectedDetail null */
+      }
     });
   }
 

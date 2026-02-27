@@ -22,7 +22,7 @@ public class StudentController {
     private StudentRepository studentRepository;
 
     @PostMapping("/profile")
-    public ResponseEntity<String> createStudentProfile(@RequestBody StudentDTO requestDTO){
+    public ResponseEntity<String> createStudentProfile(@RequestBody StudentDTO requestDTO) {
         studentService.promoteUserToStudent(
                 requestDTO.getUserId(),
                 requestDTO.getMajor(),
@@ -32,7 +32,7 @@ public class StudentController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<String> updateStudentProfile(@RequestBody StudentDTO requestDTO){
+    public ResponseEntity<String> updateStudentProfile(@RequestBody StudentDTO requestDTO) {
         studentService.updateStudentProfile(
                 requestDTO.getUserId(),
                 requestDTO.getMajor(),

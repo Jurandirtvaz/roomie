@@ -1,12 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Login } from './login';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter, Router } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
-import { Auth } from '../auth';
-import { of } from 'rxjs';
-import { LoginResponse } from '../user.interface';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {Login} from './login';
+import {provideHttpClient} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
+import {provideRouter, Router} from '@angular/router';
+import {ReactiveFormsModule} from '@angular/forms';
+import {Auth} from '../auth';
+import {of} from 'rxjs';
+import {LoginResponse} from '../user.interface';
 
 describe('Login', () => {
   let component!: Login;
@@ -47,7 +47,7 @@ describe('Login', () => {
   });
 
   it('deve chamar auth.login e navegar para /home com credenciais válidas', async () => {
-    const mockTokenResponse: LoginResponse = { token: 'jwt-token-falso', role: 'USER' };
+    const mockTokenResponse: LoginResponse = {token: 'jwt-token-falso', role: 'USER'};
     const loginSpy = jest.spyOn(auth, 'login').mockReturnValue(of(mockTokenResponse));
     const navigateSpy = jest.spyOn(router, 'navigate').mockResolvedValue(true);
 
@@ -56,15 +56,16 @@ describe('Login', () => {
 
     await component.onLogin();
 
-    expect(loginSpy).toHaveBeenCalledWith({ email: 'teste@ufape.edu.br', password: '123456' });
+    expect(loginSpy).toHaveBeenCalledWith({email: 'teste@ufape.edu.br', password: '123456'});
     expect(navigateSpy).toHaveBeenCalledWith(['/home']);
   });
 
   it('deve formatar os dados corretamente e chamar auth.register com um formulário válido', async () => {
-    const mockUserResponse = { id: 1, name: 'João Francisco', email: 'joao@ufape.edu.br', role: 'USER' };
+    const mockUserResponse = {id: 1, name: 'João Francisco', email: 'joao@ufape.edu.br', role: 'USER'};
     const registerSpy = jest.spyOn(auth, 'register').mockReturnValue(of(mockUserResponse as any));
 
-    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {
+    });
     const togglePanelSpy = jest.spyOn(component, 'togglePanel');
 
     component.registerForm.controls['name'].setValue('João Francisco');

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
+
     User findByCpf(String cpf);
 
     @Query(value = "SELECT id_proprietario AS idProprietario, nome_proprietario AS nomeProprietario, " +

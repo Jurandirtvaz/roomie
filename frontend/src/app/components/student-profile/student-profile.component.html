@@ -11,26 +11,27 @@
       </div>
     </div>
 
-    <div class="alert success" *ngIf="successMessage">
+    <div *ngIf="successMessage" class="alert success">
       <span class="material-icons">check_circle</span>
       {{ successMessage }}
     </div>
-    <div class="alert error" *ngIf="errorMessage">
+    <div *ngIf="errorMessage" class="alert error">
       <span class="material-icons">error</span>
       {{ errorMessage }}
     </div>
 
-    <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+    <form (ngSubmit)="onSubmit()" [formGroup]="studentForm">
 
       <div class="form-group">
         <label for="institution">Instituição de Ensino</label>
         <input
-          id="institution"
-          type="text"
           formControlName="institution"
+          id="institution"
           placeholder="Ex: Universidade Federal do Agreste de Pernambuco"
+          type="text"
         />
-        <div class="field-error" *ngIf="studentForm.get('institution')?.invalid && studentForm.get('institution')?.touched">
+        <div *ngIf="studentForm.get('institution')?.invalid && studentForm.get('institution')?.touched"
+             class="field-error">
           Informe o nome da sua instituição (mín. 3 caracteres).
         </div>
       </div>
@@ -38,20 +39,20 @@
       <div class="form-group">
         <label for="major">Curso</label>
         <input
-          id="major"
-          type="text"
           formControlName="major"
+          id="major"
           placeholder="Ex: Ciência da Computação"
+          type="text"
         />
-        <div class="field-error" *ngIf="studentForm.get('major')?.invalid && studentForm.get('major')?.touched">
+        <div *ngIf="studentForm.get('major')?.invalid && studentForm.get('major')?.touched" class="field-error">
           Informe o nome do seu curso (mín. 3 caracteres).
         </div>
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-back" (click)="goBack()">Voltar</button>
-        <button type="submit" class="btn-save" [disabled]="isLoading">
-          <span class="material-icons" *ngIf="!isLoading">save</span>
+        <button (click)="goBack()" class="btn-back" type="button">Voltar</button>
+        <button [disabled]="isLoading" class="btn-save" type="submit">
+          <span *ngIf="!isLoading" class="material-icons">save</span>
           {{ isLoading ? 'Salvando...' : 'Salvar' }}
         </button>
       </div>
@@ -65,41 +66,42 @@
         Telefones de contato
       </h3>
 
-      <div class="alert success" *ngIf="phonesSuccess">
+      <div *ngIf="phonesSuccess" class="alert success">
         <span class="material-icons">check_circle</span>
         {{ phonesSuccess }}
       </div>
-      <div class="alert error" *ngIf="phonesError">
+      <div *ngIf="phonesError" class="alert error">
         <span class="material-icons">error</span>
         {{ phonesError }}
       </div>
 
-      <ul class="phones-list" *ngIf="phones.length > 0">
+      <ul *ngIf="phones.length > 0" class="phones-list">
         <li *ngFor="let phone of phones; let i = index" class="phone-item">
           <span class="material-icons">phone_iphone</span>
           {{ phone }}
-          <button class="btn-remove-phone" (click)="removePhone(i)" title="Remover">
+          <button (click)="removePhone(i)" class="btn-remove-phone" title="Remover">
             <span class="material-icons">close</span>
           </button>
         </li>
       </ul>
-      <p class="no-phones" *ngIf="phones.length === 0">Nenhum telefone cadastrado.</p>
+      <p *ngIf="phones.length === 0" class="no-phones">Nenhum telefone cadastrado.</p>
 
       <div class="add-phone-row">
         <input
-          type="tel"
+          (keyup.enter)="addPhone()"
           [formControl]="newPhoneControl"
           placeholder="Ex: (81) 99999-0000"
-          (keyup.enter)="addPhone()"
+          type="tel"
         />
-        <button class="btn-add-phone" (click)="addPhone()" [disabled]="newPhoneControl.invalid || !newPhoneControl.value">
+        <button (click)="addPhone()" [disabled]="newPhoneControl.invalid || !newPhoneControl.value"
+                class="btn-add-phone">
           <span class="material-icons">add</span>
           Adicionar
         </button>
       </div>
 
       <div class="phones-actions">
-        <button class="btn-save" (click)="savePhones()" [disabled]="isSavingPhones">
+        <button (click)="savePhones()" [disabled]="isSavingPhones" class="btn-save">
           {{ isSavingPhones ? 'Salvando...' : 'Salvar telefones' }}
         </button>
       </div>

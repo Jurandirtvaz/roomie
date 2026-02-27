@@ -1,12 +1,12 @@
-import { Routes } from '@angular/router';
-import { authGuard } from './auth/auth-guard';
-import { Login } from './auth/login/login';
-import { Unauthorized } from './auth/unauthorized/unauthorized';
-import { Home } from './home/home';
-import { PropertyFormComponent } from './property-form/property-form';
-import { ProfileEditComponent } from './components/profile/profile-edit.component';
-import { StudentProfileComponent } from './components/student-profile/student-profile.component';
-import { MeusImoveis } from './pages/meus-imoveis/meus-imoveis';
+import {Routes} from '@angular/router';
+import {authGuard} from './auth/auth-guard';
+import {Login} from './auth/login/login';
+import {Unauthorized} from './auth/unauthorized/unauthorized';
+import {Home} from './home/home';
+import {PropertyFormComponent} from './property-form/property-form';
+import {ProfileEditComponent} from './components/profile/profile-edit.component';
+import {StudentProfileComponent} from './components/student-profile/student-profile.component';
+import {MeusImoveis} from './pages/meus-imoveis/meus-imoveis';
 
 export const routes: Routes = [
   {

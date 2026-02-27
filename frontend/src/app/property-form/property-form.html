@@ -3,11 +3,12 @@
 <div class="container">
   <h2>Cadastrar Imóvel</h2>
 
-  <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+  <form (ngSubmit)="onSubmit()" [formGroup]="propertyForm">
 
     <div class="form-group">
       <label for="title">Título do Anúncio</label>
-      <input id="title" type="text" formControlName="title" class="form-control" placeholder="Ex: Quarto individual perto da UFAPE">
+      <input class="form-control" formControlName="title" id="title" placeholder="Ex: Quarto individual perto da UFAPE"
+             type="text">
       <div *ngIf="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched" class="error">
         O título é obrigatório e deve ter entre 5 e 100 caracteres.
       </div>
@@ -15,7 +16,7 @@
 
     <div class="form-group">
       <label for="type">Tipo de Imóvel</label>
-      <select id="type" formControlName="type" class="form-control">
+      <select class="form-control" formControlName="type" id="type">
         <option [ngValue]="null" disabled>Selecione...</option>
         <option *ngFor="let type of propertyTypes" [value]="type">
           {{ getLabelForType(type) }}
@@ -28,7 +29,7 @@
 
     <div class="form-group">
       <label for="price">Preço (R$)</label>
-      <input id="price" type="number" formControlName="price" class="form-control" placeholder="0.00">
+      <input class="form-control" formControlName="price" id="price" placeholder="0.00" type="number">
       <div *ngIf="propertyForm.get('price')?.invalid && propertyForm.get('price')?.touched" class="error">
         O preço é obrigatório e deve ser positivo.
       </div>
@@ -36,65 +37,71 @@
 
     <div class="form-group">
       <label for="vacancies">Nº de Quartos / Vagas</label>
-      <input id="vacancies" type="number" formControlName="availableVacancies" class="form-control">
-      <div *ngIf="propertyForm.get('availableVacancies')?.invalid && propertyForm.get('availableVacancies')?.touched" class="error">
+      <input class="form-control" formControlName="availableVacancies" id="vacancies" type="number">
+      <div *ngIf="propertyForm.get('availableVacancies')?.invalid && propertyForm.get('availableVacancies')?.touched"
+           class="error">
         Informe pelo menos 1 vaga.
       </div>
     </div>
 
     <div class="form-group">
       <label for="description">Descrição</label>
-      <textarea id="description" formControlName="description" class="form-control" rows="3"></textarea>
+      <textarea class="form-control" formControlName="description" id="description" rows="3"></textarea>
     </div>
 
     <hr>
     <h3>Endereço</h3>
 
-    <div formGroupName="address" class="address-group">
+    <div class="address-group" formGroupName="address">
 
       <div class="form-group">
         <label for="street">Rua</label>
-        <input id="street" type="text" formControlName="street" class="form-control">
-        <div *ngIf="propertyForm.get('address.street')?.invalid && propertyForm.get('address.street')?.touched" class="error">
+        <input class="form-control" formControlName="street" id="street" type="text">
+        <div *ngIf="propertyForm.get('address.street')?.invalid && propertyForm.get('address.street')?.touched"
+             class="error">
           A rua é obrigatória.
         </div>
       </div>
 
       <div class="form-group">
         <label for="number">Número</label>
-        <input id="number" type="text" formControlName="number" class="form-control">
-        <div *ngIf="propertyForm.get('address.number')?.invalid && propertyForm.get('address.number')?.touched" class="error">
+        <input class="form-control" formControlName="number" id="number" type="text">
+        <div *ngIf="propertyForm.get('address.number')?.invalid && propertyForm.get('address.number')?.touched"
+             class="error">
           O número é obrigatório.
         </div>
       </div>
 
       <div class="form-group">
         <label for="district">Bairro</label>
-        <input id="district" type="text" formControlName="district" class="form-control">
-        <div *ngIf="propertyForm.get('address.district')?.invalid && propertyForm.get('address.district')?.touched" class="error">
+        <input class="form-control" formControlName="district" id="district" type="text">
+        <div *ngIf="propertyForm.get('address.district')?.invalid && propertyForm.get('address.district')?.touched"
+             class="error">
           O bairro é obrigatório.
         </div>
       </div>
 
       <div class="form-group">
         <label for="city">Cidade</label>
-        <input id="city" type="text" formControlName="city" class="form-control">
-        <div *ngIf="propertyForm.get('address.city')?.invalid && propertyForm.get('address.city')?.touched" class="error">
+        <input class="form-control" formControlName="city" id="city" type="text">
+        <div *ngIf="propertyForm.get('address.city')?.invalid && propertyForm.get('address.city')?.touched"
+             class="error">
           A cidade é obrigatória.
         </div>
       </div>
 
       <div class="form-group">
         <label for="state">Estado</label>
-        <input id="state" type="text" formControlName="state" class="form-control" placeholder="Ex: PE">
-        <div *ngIf="propertyForm.get('address.state')?.invalid && propertyForm.get('address.state')?.touched" class="error">
+        <input class="form-control" formControlName="state" id="state" placeholder="Ex: PE" type="text">
+        <div *ngIf="propertyForm.get('address.state')?.invalid && propertyForm.get('address.state')?.touched"
+             class="error">
           O estado é obrigatório.
         </div>
       </div>
 
       <div class="form-group">
         <label for="cep">CEP</label>
-        <input id="cep" type="text" formControlName="cep" class="form-control" placeholder="00000-000">
+        <input class="form-control" formControlName="cep" id="cep" placeholder="00000-000" type="text">
         <div *ngIf="propertyForm.get('address.cep')?.invalid && propertyForm.get('address.cep')?.touched" class="error">
           O CEP é inválido.
         </div>
@@ -109,14 +116,14 @@
       <div class="toggle-item">
         <span class="toggle-label">Aceita animais?</span>
         <div class="toggle-buttons">
-          <button type="button"
-            [class.active]="propertyForm.get('acceptAnimals')?.value === true"
-            (click)="propertyForm.get('acceptAnimals')?.setValue(true)">
+          <button (click)="propertyForm.get('acceptAnimals')?.setValue(true)"
+                  [class.active]="propertyForm.get('acceptAnimals')?.value === true"
+                  type="button">
             Sim
           </button>
-          <button type="button"
-            [class.active]="propertyForm.get('acceptAnimals')?.value === false"
-            (click)="propertyForm.get('acceptAnimals')?.setValue(false)">
+          <button (click)="propertyForm.get('acceptAnimals')?.setValue(false)"
+                  [class.active]="propertyForm.get('acceptAnimals')?.value === false"
+                  type="button">
             Não
           </button>
         </div>
@@ -125,14 +132,14 @@
       <div class="toggle-item">
         <span class="toggle-label">Tem garagem?</span>
         <div class="toggle-buttons">
-          <button type="button"
-            [class.active]="propertyForm.get('hasGarage')?.value === true"
-            (click)="propertyForm.get('hasGarage')?.setValue(true)">
+          <button (click)="propertyForm.get('hasGarage')?.setValue(true)"
+                  [class.active]="propertyForm.get('hasGarage')?.value === true"
+                  type="button">
             Sim
           </button>
-          <button type="button"
-            [class.active]="propertyForm.get('hasGarage')?.value === false"
-            (click)="propertyForm.get('hasGarage')?.setValue(false)">
+          <button (click)="propertyForm.get('hasGarage')?.setValue(false)"
+                  [class.active]="propertyForm.get('hasGarage')?.value === false"
+                  type="button">
             Não
           </button>
         </div>
@@ -148,16 +155,17 @@
         Adicione fotos para destacar seu anúncio.
       </p>
 
-      <button type="button" class="btn-image" (click)="toggleImageUpload()">
-          📸 Inserir Imagens
+      <button (click)="toggleImageUpload()" class="btn-image" type="button">
+        📸 Inserir Imagens
       </button>
 
       <div *ngIf="showImageUpload" class="image-upload-panel">
 
-        <label for="fileInput" class="file-input-label">
+        <label class="file-input-label" for="fileInput">
           📂 Escolher Arquivos
         </label>
-        <input id="fileInput" type="file" multiple accept="image/*" (change)="onFileSelected($event)" class="file-input-hidden">
+        <input (change)="onFileSelected($event)" accept="image/*" class="file-input-hidden" id="fileInput" multiple
+               type="file">
 
         <p class="image-upload-hint">Pode selecionar múltiplas imagens.</p>
 
@@ -166,7 +174,7 @@
 
             <img [src]="preview" alt="Preview" class="preview-img">
 
-            <button type="button" (click)="removeImage(i)" title="Remover" class="remove-btn">
+            <button (click)="removeImage(i)" class="remove-btn" title="Remover" type="button">
               ✕
             </button>
 
@@ -178,7 +186,7 @@
     <div *ngIf="submitSuccess" class="alert-success">✅ Imóvel cadastrado com sucesso! Redirecionando...</div>
     <div *ngIf="submitError" class="alert-error">❌ {{ submitError }}</div>
 
-    <button type="submit" [disabled]="propertyForm.invalid || isSubmitting">
+    <button [disabled]="propertyForm.invalid || isSubmitting" type="submit">
       {{ isSubmitting ? 'Salvando...' : 'Salvar Imóvel' }}
     </button>
   </form>

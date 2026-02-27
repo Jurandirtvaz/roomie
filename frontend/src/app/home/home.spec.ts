@@ -1,33 +1,34 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Home } from './home';
-import { provideRouter } from '@angular/router';
-import { Auth } from '../auth/auth';
-import { ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import { PropertyService } from './property.service';
-import { of } from 'rxjs';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {Home} from './home';
+import {provideRouter} from '@angular/router';
+import {Auth} from '../auth/auth';
+import {ReactiveFormsModule} from '@angular/forms';
+import {By} from '@angular/platform-browser';
+import {PropertyService} from './property.service';
+import {of} from 'rxjs';
 
 describe('Home', () => {
   let component: Home;
   let fixture: ComponentFixture<Home>;
 
-  const mockUser = { id: 1, name: 'Test User', email: 'test@test.com', role: 'USER' as const };
+  const mockUser = {id: 1, name: 'Test User', email: 'test@test.com', role: 'USER' as const};
   const mockAuth = {
-    logout: () => {},
+    logout: () => {
+    },
     currentUser$: of(mockUser)
   };
-  const mockPropertyService = { buscarComFiltros: () => of([]) };
+  const mockPropertyService = {buscarComFiltros: () => of([])};
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Home, ReactiveFormsModule],
       providers: [
         provideRouter([]),
-        { provide: Auth, useValue: mockAuth },
-        { provide: PropertyService, useValue: mockPropertyService }
+        {provide: Auth, useValue: mockAuth},
+        {provide: PropertyService, useValue: mockPropertyService}
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(Home);
     component = fixture.componentInstance;
