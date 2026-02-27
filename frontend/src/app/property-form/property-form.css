@@ -110,6 +110,17 @@ button[type='submit']:disabled {
   margin-bottom: 15px;
 }
 
+.existing-photos {
+  margin-bottom: 16px;
+}
+
+.existing-photos-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 8px;
+}
+
 .image-upload-panel {
   margin-top: 20px;
   padding: 15px;

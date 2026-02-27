@@ -27,6 +27,10 @@ export class PropertyService {
     return this.http.get<PropertyDetailView[]>(`${this.apiUrl}/meus`);
   }
 
+  getById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
   publishProperty(id: number): Observable<any> {
     return this.http.patch(`${this.apiUrl}/${id}/publish`, {});
   }

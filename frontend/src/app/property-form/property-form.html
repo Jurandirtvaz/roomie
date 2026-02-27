@@ -155,8 +155,19 @@
         Adicione fotos para destacar seu anúncio.
       </p>
 
+      <!-- Fotos existentes (modo edição) -->
+      <div *ngIf="existingPhotos.length > 0" class="existing-photos">
+        <p class="existing-photos-label">Fotos atuais:</p>
+        <div class="image-previews">
+          <div *ngFor="let photo of existingPhotos; let i = index" class="preview-item">
+            <img [src]="photo.url" alt="Foto atual {{ i + 1 }}" class="preview-img">
+            <button (click)="removeExistingPhoto(i)" class="remove-btn" title="Remover" type="button">✕</button>
+          </div>
+        </div>
+      </div>
+
       <button (click)="toggleImageUpload()" class="btn-image" type="button">
-        📸 Inserir Imagens
+        📸 {{ editMode ? 'Adicionar / Substituir Imagens' : 'Inserir Imagens' }}
       </button>
 
       <div *ngIf="showImageUpload" class="image-upload-panel">

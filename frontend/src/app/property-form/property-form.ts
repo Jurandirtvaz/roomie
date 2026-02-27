@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {PropertyType} from '../models/property-type.enum';
 import {PropertyService} from '../services/propertyService';
 import {HeaderComponent} from '../components/shared/header/header.component';
+import {environment} from '../../enviroments/enviroment';
 
 @Component({
   selector: 'app-property-form',
@@ -25,6 +26,9 @@ export class PropertyFormComponent implements OnInit {
 
   selectedFiles: File[] = [];
   imagePreviews: string[] = [];
+  existingPhotos: { id: number; url: string }[] = [];
+
+  private readonly apiBase = environment.apiUrl;
 
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
@@ -89,6 +93,27 @@ export class PropertyFormComponent implements OnInit {
         console.error('Erro ao carregar imóvel:', err);
       }
     });
+
+    this.propertyService.getById(id).subscribe({
+      next: (property) => {
+        if (property.photos && property.photos.length > 0) {
+          this.existingPhotos = property.photos.map((p: any) => ({
+            id: p.id,
+            url: p.path.startsWith('http') ? p.path : this.apiBase + p.path
+          }));
+          this.showImageUpload = true;
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao carregar fotos:', err);
+      }
+    });
+  }
+
+  removeExistingPhoto(index: number): void {
+    this.existingPhotos.splice(index, 1);
+    this.cdr.detectChanges();
   }
 
   toggleImageUpload(): void {

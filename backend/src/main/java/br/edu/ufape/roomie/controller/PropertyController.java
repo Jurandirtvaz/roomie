@@ -57,6 +57,13 @@ public class PropertyController {
         return ResponseEntity.ok(properties);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Property> getById(@PathVariable Long id) {
+        return propertyRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/details")
     public ResponseEntity<List<PropertyDetailView>> getAllDetails() {
         return ResponseEntity.ok(propertyRepository.findAllDetails());
