@@ -57,6 +57,13 @@ public class PropertyController {
         return ResponseEntity.ok(properties);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Property> getById(@PathVariable Long id) {
+        return propertyRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/details")
     public ResponseEntity<List<PropertyDetailView>> getAllDetails() {
         return ResponseEntity.ok(propertyRepository.findAllDetails());
@@ -94,6 +101,36 @@ public class PropertyController {
         propertyRepository.save(property);
 
         return ResponseEntity.ok(property);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProperty(@PathVariable Long id) {
+        try {
+            propertyService.deleteProperty(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{id}/draft")
+    public ResponseEntity<?> setPropertyToDraft(@PathVariable Long id, Authentication authentication) {
+        try {
+            Property property = propertyService.setPropertyToDraft(id);
+            return ResponseEntity.ok(property);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Property> updateProperty(
+            @PathVariable Long id,
+            @Valid @RequestPart("data") PropertyRequestDTO dto,
+            @RequestPart(value = "photos", required = false) List<MultipartFile> photos
+    ) {
+        Property updated = propertyService.updateProperty(id, dto, photos);
+        return ResponseEntity.ok(updated);
     }
 
 }

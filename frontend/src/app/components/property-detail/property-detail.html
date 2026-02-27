@@ -13,7 +13,7 @@
           [class.active]="i === selectedPhotoIndex"
           [attr.aria-label]="'Miniatura ' + (i + 1)"
         >
-          <img [src]="apiBase + photo.path" alt="Miniatura {{ i + 1 }}" />
+          <img [src]="photoUrl(photo.path)" alt="Miniatura {{ i + 1 }}" />
         </button>
       </div>
     </div>
