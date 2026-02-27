@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {PropertyType} from '../models/property-type.enum';
 import {PropertyService} from '../services/propertyService';
 import {HeaderComponent} from '../components/shared/header/header.component';
@@ -20,12 +20,15 @@ export class PropertyFormComponent implements OnInit {
   isSubmitting: boolean = false;
   submitSuccess: boolean = false;
   submitError: string = '';
+  editMode: boolean = false;
+  editPropertyId: number | null = null;
 
   selectedFiles: File[] = [];
   imagePreviews: string[] = [];
 
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly propertyService = inject(PropertyService);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -49,6 +52,42 @@ export class PropertyFormComponent implements OnInit {
       acceptAnimals: [false],
       hasGarage: [false],
       gender: ['MIXED']
+    });
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.editMode = true;
+      this.editPropertyId = +id;
+      this.loadPropertyData(this.editPropertyId);
+    }
+  }
+
+  loadPropertyData(id: number): void {
+    this.propertyService.getDetailById(id).subscribe({
+      next: (property) => {
+        this.propertyForm.patchValue({
+          title: property.titulo,
+          description: property.descricao,
+          price: property.preco,
+          availableVacancies: property.vagasDisponiveis,
+          type: property.tipo,
+          acceptAnimals: property.aceitaAnimais,
+          hasGarage: property.temGaragem,
+          gender: property.generoMoradores,
+          address: {
+            street: property.rua,
+            number: property.numEndereco?.toString(),
+            district: property.bairro,
+            city: property.cidade,
+            state: property.estado,
+            cep: property.cep
+          }
+        });
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar imóvel:', err);
+      }
     });
   }
 
@@ -91,20 +130,37 @@ export class PropertyFormComponent implements OnInit {
         formData.append('photos', file);
       }
 
-      this.propertyService.createProperty(formData).subscribe({
-        next: () => {
-          this.submitSuccess = true;
-          this.submitError = '';
-          this.isSubmitting = false;
-          setTimeout(() => this.router.navigate(['/home'], {queryParams: {from: 'create'}}), 1500);
-        },
-        error: (err) => {
-          console.error('Erro ao salvar imóvel:', err);
-          this.submitError = 'Erro ao cadastrar o imóvel. Tente novamente mais tarde.';
-          this.submitSuccess = false;
-          this.isSubmitting = false;
-        }
-      });
+      if (this.editMode && this.editPropertyId) {
+        this.propertyService.updateProperty(this.editPropertyId, formData).subscribe({
+          next: () => {
+            this.submitSuccess = true;
+            this.submitError = '';
+            this.isSubmitting = false;
+            setTimeout(() => this.router.navigate(['/meus-imoveis']), 1500);
+          },
+          error: (err) => {
+            console.error('Erro ao atualizar imóvel:', err);
+            this.submitError = 'Erro ao atualizar o imóvel. Tente novamente mais tarde.';
+            this.submitSuccess = false;
+            this.isSubmitting = false;
+          }
+        });
+      } else {
+        this.propertyService.createProperty(formData).subscribe({
+          next: () => {
+            this.submitSuccess = true;
+            this.submitError = '';
+            this.isSubmitting = false;
+            setTimeout(() => this.router.navigate(['/home'], {queryParams: {from: 'create'}}), 1500);
+          },
+          error: (err) => {
+            console.error('Erro ao salvar imóvel:', err);
+            this.submitError = 'Erro ao cadastrar o imóvel. Tente novamente mais tarde.';
+            this.submitSuccess = false;
+            this.isSubmitting = false;
+          }
+        });
+      }
     } else {
       this.propertyForm.markAllAsTouched();
     }

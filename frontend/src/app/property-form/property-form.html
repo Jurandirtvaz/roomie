@@ -1,7 +1,7 @@
 <app-header [showCreateProperty]="false"></app-header>
 
 <div class="container">
-  <h2>Cadastrar Imóvel</h2>
+  <h2>{{ editMode ? 'Editar Imóvel' : 'Cadastrar Imóvel' }}</h2>
 
   <form (ngSubmit)="onSubmit()" [formGroup]="propertyForm">
 
@@ -183,7 +183,7 @@
       </div>
     </div>
 
-    <div *ngIf="submitSuccess" class="alert-success">✅ Imóvel cadastrado com sucesso! Redirecionando...</div>
+    <div *ngIf="submitSuccess" class="alert-success">✅ {{ editMode ? 'Imóvel atualizado com sucesso!' : 'Imóvel cadastrado com sucesso!' }} Redirecionando...</div>
     <div *ngIf="submitError" class="alert-error">❌ {{ submitError }}</div>
 
     <button [disabled]="propertyForm.invalid || isSubmitting" type="submit">

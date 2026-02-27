@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PropertyService } from '../../services/propertyService';
 import { UserService } from '../../services/user.service';
 import { Auth } from '../../auth/auth';
@@ -21,12 +21,14 @@ export class MeusImoveis implements OnInit {
   properties: PropertyDetailView[] = [];
   ownerReport: OwnerReportView | null = null;
   isLoading = true;
+  deleteConfirmId: number | null = null;
 
   constructor(
     private readonly propertyService: PropertyService,
     private readonly userService: UserService,
     private readonly auth: Auth,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly router: Router
   ) {
   }
 
@@ -104,6 +106,44 @@ export class MeusImoveis implements OnInit {
       },
       error: (err: any) => {
         console.error('Erro ao publicar', err);
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  editProperty(id: number) {
+    this.propertyService.setDraft(id).subscribe({
+      next: () => {
+        this.router.navigate(['/properties', id, 'edit']);
+      },
+      error: (err: any) => {
+        console.error('Erro ao definir como rascunho', err);
+        // Navigate to edit even if already draft
+        this.router.navigate(['/properties', id, 'edit']);
+      }
+    });
+  }
+
+  askDelete(id: number) {
+    this.deleteConfirmId = id;
+  }
+
+  cancelDelete() {
+    this.deleteConfirmId = null;
+  }
+
+  confirmDelete() {
+    if (this.deleteConfirmId === null) return;
+    const id = this.deleteConfirmId;
+    this.deleteConfirmId = null;
+    this.propertyService.deleteProperty(id).subscribe({
+      next: () => {
+        this.loadProperties();
+        this.loadOwnerReport();
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        console.error('Erro ao excluir imóvel', err);
         this.cdr.detectChanges();
       }
     });

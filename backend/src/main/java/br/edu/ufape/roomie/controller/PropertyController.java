@@ -96,4 +96,34 @@ public class PropertyController {
         return ResponseEntity.ok(property);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProperty(@PathVariable Long id) {
+        try {
+            propertyService.deleteProperty(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{id}/draft")
+    public ResponseEntity<?> setPropertyToDraft(@PathVariable Long id, Authentication authentication) {
+        try {
+            Property property = propertyService.setPropertyToDraft(id);
+            return ResponseEntity.ok(property);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Property> updateProperty(
+            @PathVariable Long id,
+            @Valid @RequestPart("data") PropertyRequestDTO dto,
+            @RequestPart(value = "photos", required = false) List<MultipartFile> photos
+    ) {
+        Property updated = propertyService.updateProperty(id, dto, photos);
+        return ResponseEntity.ok(updated);
+    }
+
 }

@@ -31,6 +31,18 @@ export class PropertyService {
     return this.http.patch(`${this.apiUrl}/${id}/publish`, {});
   }
 
+  setDraft(id: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}/draft`, {});
+  }
+
+  deleteProperty(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  updateProperty(id: number, formData: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, formData);
+  }
+
   getAllDetails(): Observable<PropertyDetailView[]> {
     return this.http.get<PropertyDetailView[]>(`${this.apiUrl}/details`);
   }

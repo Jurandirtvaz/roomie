@@ -42,6 +42,12 @@ export const routes: Routes = [
     title: 'Cadastrar Imóvel - Roomie'
   },
   {
+    path: 'properties/:id/edit',
+    component: PropertyFormComponent,
+    canActivate: [authGuard],
+    title: 'Editar Imóvel - Roomie'
+  },
+  {
     path: 'profile',
     component: ProfileEditComponent,
     canActivate: [authGuard],
