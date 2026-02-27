@@ -1,5 +1,6 @@
 package br.edu.ufape.roomie.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class PropertyEvaluation {
     @Column(name = "id_avaliacao")
     private Long idEvaluation;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_imovel", nullable = false)
     private Property property;

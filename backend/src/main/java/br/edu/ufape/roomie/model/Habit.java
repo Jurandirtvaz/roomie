@@ -1,6 +1,7 @@
 package br.edu.ufape.roomie.model;
 
 import br.edu.ufape.roomie.enums.StudySchedule;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Habit {
     @Column(name = "id_habito")
     private Long idHabit;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_estudante", nullable = false)
     private Student student;

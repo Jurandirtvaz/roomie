@@ -1,6 +1,7 @@
 package br.edu.ufape.roomie.model;
 
 import br.edu.ufape.roomie.enums.ContractStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Contract {
     @Column(name = "id_contrato")
     private Long idContract;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_imovel", nullable = false)
     private Property property;
