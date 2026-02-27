@@ -1,12 +1,12 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {Auth} from '../../auth/auth';
-import {StudentService} from '../../services/student.service';
-import {UserService} from '../../services/user.service';
-import {HeaderComponent} from '../shared/header/header.component';
-import {take} from 'rxjs';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Auth } from '../../auth/auth';
+import { StudentService } from '../../services/student.service';
+import { UserService } from '../../services/user.service';
+import { HeaderComponent } from '../shared/header/header.component';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-student-profile',
@@ -22,6 +22,7 @@ export class StudentProfileComponent implements OnInit {
   phones: string[] = [];
   isLoading = false;
   isSavingPhones = false;
+  hasProfile = false;
   successMessage = '';
   errorMessage = '';
   phonesSuccess = '';
@@ -32,6 +33,7 @@ export class StudentProfileComponent implements OnInit {
   private readonly studentService = inject(StudentService);
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.studentForm = this.fb.group({
@@ -46,6 +48,7 @@ export class StudentProfileComponent implements OnInit {
       if (!user) return;
       this.studentService.getById(user.id).subscribe({
         next: (contact) => {
+          this.hasProfile = true;
           this.studentForm.patchValue({
             institution: contact.instituicao ?? '',
             major: contact.curso ?? ''
@@ -53,6 +56,7 @@ export class StudentProfileComponent implements OnInit {
           this.phones = contact.telefones
             ? contact.telefones.split(',').map(p => p.trim()).filter(Boolean)
             : [];
+          this.cdr.detectChanges();
         },
         error: () => { /* estudante ainda não tem perfil */
         }
@@ -96,7 +100,9 @@ export class StudentProfileComponent implements OnInit {
       this.studentService.createProfile(dto).subscribe({
         next: () => {
           this.isLoading = false;
+          this.hasProfile = true;
           this.successMessage = 'Perfil de estudante salvo com sucesso!';
+          this.cdr.detectChanges();
         },
         error: () => {
           // Perfil já existe — tenta atualizar
@@ -104,10 +110,12 @@ export class StudentProfileComponent implements OnInit {
             next: () => {
               this.isLoading = false;
               this.successMessage = 'Perfil de estudante atualizado com sucesso!';
+              this.cdr.detectChanges();
             },
             error: () => {
               this.isLoading = false;
               this.errorMessage = 'Erro ao salvar perfil de estudante. Tente novamente.';
+              this.cdr.detectChanges();
             }
           });
         }
@@ -126,10 +134,12 @@ export class StudentProfileComponent implements OnInit {
       this.phones = [...this.phones, num];
     }
     this.newPhoneControl.reset();
+    this.cdr.detectChanges();
   }
 
   removePhone(index: number): void {
     this.phones = this.phones.filter((_, i) => i !== index);
+    this.cdr.detectChanges();
   }
 
   savePhones(): void {
@@ -141,10 +151,12 @@ export class StudentProfileComponent implements OnInit {
       next: () => {
         this.isSavingPhones = false;
         this.phonesSuccess = 'Telefones salvos com sucesso!';
+        this.cdr.detectChanges();
       },
       error: () => {
         this.isSavingPhones = false;
         this.phonesError = 'Erro ao salvar telefones. Tente novamente.';
+        this.cdr.detectChanges();
       }
     });
   }

@@ -1,28 +1,32 @@
-import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {PropertyService} from '../../services/propertyService';
-import {UserService} from '../../services/user.service';
-import {Auth} from '../../auth/auth';
-import {Property} from '../../models/property';
-import {OwnerReportView} from '../../models/owner-report-view';
-import {take} from 'rxjs';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { PropertyService } from '../../services/propertyService';
+import { UserService } from '../../services/user.service';
+import { Auth } from '../../auth/auth';
+import { PropertyDetailView } from '../../models/property-detail-view';
+import { OwnerReportView } from '../../models/owner-report-view';
+import { HeaderComponent } from '../../components/shared/header/header.component';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-meus-imoveis',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, HeaderComponent],
   templateUrl: './meus-imoveis.html',
   styleUrl: './meus-imoveis.css',
 })
 export class MeusImoveis implements OnInit {
 
-  properties: Property[] = [];
+  properties: PropertyDetailView[] = [];
   ownerReport: OwnerReportView | null = null;
+  isLoading = true;
 
   constructor(
     private readonly propertyService: PropertyService,
     private readonly userService: UserService,
-    private readonly auth: Auth
+    private readonly auth: Auth,
+    private readonly cdr: ChangeDetectorRef
   ) {
   }
 
@@ -33,13 +37,46 @@ export class MeusImoveis implements OnInit {
 
   loadProperties() {
     this.propertyService.getMyProperties().subscribe({
-      next: (data: Property[]) => {
+      next: (data: PropertyDetailView[]) => {
         this.properties = data;
+        this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err: any) => {
         console.error('Erro ao buscar imóveis', err);
+        this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  statusLabel(status: string | undefined): string {
+    const map: Record<string, string> = {
+      DRAFT: 'Rascunho',
+      ACTIVE: 'Ativo',
+      RENTED: 'Alugado'
+    };
+    return status ? (map[status] ?? status) : '';
+  }
+
+  statusClass(status: string | undefined): string {
+    const map: Record<string, string> = {
+      DRAFT: 'status-draft',
+      ACTIVE: 'status-active',
+      RENTED: 'status-rented'
+    };
+    return status ? (map[status] ?? '') : '';
+  }
+
+  typeLabel(type: string | undefined): string {
+    const map: Record<string, string> = {
+      HOUSE: 'Casa',
+      APARTMENT: 'Apartamento',
+      STUDIO: 'Studio',
+      ROOM: 'Quarto',
+      DORMITORY: 'República'
+    };
+    return type ? (map[type] ?? type) : '';
   }
 
   loadOwnerReport() {
@@ -48,9 +85,11 @@ export class MeusImoveis implements OnInit {
       this.userService.getOwnersReport().subscribe({
         next: (reports) => {
           this.ownerReport = reports.find(r => r.idProprietario === currentUser.id) ?? null;
+          this.cdr.detectChanges();
         },
         error: (err: any) => {
           console.error('Erro ao buscar relatório', err);
+          this.cdr.detectChanges();
         }
       });
     });
@@ -59,12 +98,13 @@ export class MeusImoveis implements OnInit {
   publish(id: number) {
     this.propertyService.publishProperty(id).subscribe({
       next: () => {
-        alert('Imóvel publicado com sucesso!');
         this.loadProperties();
         this.loadOwnerReport();
+        this.cdr.detectChanges();
       },
       error: (err: any) => {
         console.error('Erro ao publicar', err);
+        this.cdr.detectChanges();
       }
     });
   }
