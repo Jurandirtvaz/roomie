@@ -36,6 +36,10 @@ export class PropertyDetail {
     this.selectedPhotoIndex = index;
   }
 
+  photoUrl(path: string): string {
+    return path.startsWith('http') ? path : this.apiBase + path;
+  }
+
   typeLabel(type?: string): string {
     const map: Record<string, string> = {
       HOUSE: 'Casa',
