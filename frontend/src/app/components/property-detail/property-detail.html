@@ -6,17 +6,15 @@
     <div *ngIf="photos.length > 0; else noPhotos" class="gallery">
       <img [src]="selectedPhotoUrl" alt="Foto do imóvel" class="main-photo" />
       <div *ngIf="photos.length > 1" class="thumbnails">
-        <img
-          (click)="selectPhoto(i)"
-          (keydown.enter)="selectPhoto(i)"
-          (keydown.space)="selectPhoto(i)"
+        <button
           *ngFor="let photo of photos; let i = index"
+          (click)="selectPhoto(i)"
+          class="thumbnail-btn"
           [class.active]="i === selectedPhotoIndex"
-          [src]="apiBase + photo.path"
-          alt="Miniatura {{ i + 1 }}"
-          role="button"
-          tabindex="0"
-        />
+          [attr.aria-label]="'Miniatura ' + (i + 1)"
+        >
+          <img [src]="apiBase + photo.path" alt="Miniatura {{ i + 1 }}" />
+        </button>
       </div>
     </div>
     <ng-template #noPhotos>
