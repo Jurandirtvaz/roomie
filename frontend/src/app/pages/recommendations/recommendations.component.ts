@@ -102,7 +102,7 @@ export class RecommendationsComponent implements OnInit {
   }
 
   get availableMajors(): string[] {
-    return [...new Set(this.allRecommendations.map(r => r.major))].sort();
+    return [...new Set(this.allRecommendations.map(r => r.major))].sort((a, b) => a.localeCompare(b));
   }
 
   get availableStudySchedules(): string[] {
@@ -112,15 +112,15 @@ export class RecommendationsComponent implements OnInit {
   }
 
   get availableHobbies(): string[] {
-    return [...(this.myHabits?.hobbies ?? [])].sort();
+    return [...(this.myHabits?.hobbies ?? [])].sort((a, b) => a.localeCompare(b));
   }
 
   get availableLifeStyles(): string[] {
-    return [...(this.myHabits?.lifeStyles ?? [])].sort();
+    return [...(this.myHabits?.lifeStyles ?? [])].sort((a, b) => a.localeCompare(b));
   }
 
   get availableCleaningPrefs(): string[] {
-    return [...(this.myHabits?.cleaningPrefs ?? [])].sort();
+    return [...(this.myHabits?.cleaningPrefs ?? [])].sort((a, b) => a.localeCompare(b));
   }
 
   get hasActiveFilters(): boolean {
