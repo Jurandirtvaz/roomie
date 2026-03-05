@@ -28,7 +28,7 @@ export class FilterPanelComponent implements OnChanges {
   @Input() filters: FilterState = { ...DEFAULT_FILTER_STATE };
 
   @Output() filtersChange = new EventEmitter<FilterState>();
-  @Output() close = new EventEmitter<void>();
+  @Output() panelClose = new EventEmitter<void>();
 
   local: FilterState = { ...DEFAULT_FILTER_STATE };
 
@@ -79,16 +79,16 @@ export class FilterPanelComponent implements OnChanges {
     category: 'studySchedules' | 'selectedHobbies' | 'selectedLifeStyles' | 'selectedCleaningPrefs',
     value: string
   ): boolean {
-    return (this.local[category] as string[]).includes(value);
+    return this.local[category].includes(value);
   }
 
   toggle(
     category: 'studySchedules' | 'selectedHobbies' | 'selectedLifeStyles' | 'selectedCleaningPrefs',
     value: string
   ): void {
-    const arr = this.local[category] as string[];
+    const arr = this.local[category];
     const idx = arr.indexOf(value);
-    (this.local[category] as string[]) = idx >= 0 ? arr.filter(v => v !== value) : [...arr, value];
+    this.local[category] = idx >= 0 ? arr.filter(v => v !== value) : [...arr, value];
     this.emit();
   }
 
