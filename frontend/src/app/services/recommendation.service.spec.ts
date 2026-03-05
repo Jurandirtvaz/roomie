@@ -10,9 +10,9 @@ describe('RecommendationService', () => {
   let httpMock: HttpTestingController;
 
   const mockRecommendations: RoommateRecommendation[] = [
-    {studentId: 1, name: 'Alice', major: 'CC', compatibilityPercentage: 85, commonInterests: ['Leitura']},
-    {studentId: 2, name: 'Bob', major: 'EC', compatibilityPercentage: 60, commonInterests: ['Esportes']},
-    {studentId: 3, name: 'Carol', major: 'CC', compatibilityPercentage: 40, commonInterests: ['Música']},
+    {studentId: 1, name: 'Alice', major: 'CC', compatibilityPercentage: 85, commonInterests: ['Leitura'], studySchedule: 'manhã', hobbies: [], lifeStyles: [], cleaningPrefs: []},
+    {studentId: 2, name: 'Bob', major: 'EC', compatibilityPercentage: 60, commonInterests: ['Esportes'], studySchedule: 'tarde', hobbies: [], lifeStyles: [], cleaningPrefs: []},
+    {studentId: 3, name: 'Carol', major: 'CC', compatibilityPercentage: 40, commonInterests: ['Música'], studySchedule: null, hobbies: [], lifeStyles: [], cleaningPrefs: []},
   ];
 
   beforeEach(() => {
