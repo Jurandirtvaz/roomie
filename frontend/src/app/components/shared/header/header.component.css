@@ -73,7 +73,7 @@
   cursor: pointer;
   position: relative;
   transition: background 0.2s;
-  background-color: #0d83d7;
+  background-color: #0060b0;
   color: white;
 }
 
@@ -178,6 +178,10 @@
   cursor: pointer;
   transition: background 0.15s;
   position: relative;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
 }
 
 .notif-item:last-child {
