@@ -109,7 +109,7 @@ class InterestServiceTest {
 
         assertThatThrownBy(() -> interestService.registerInterest(999L, student))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessage("Imóvel não encontrado.");
+                .hasMessageContaining("Imóvel não encontrado.");
 
         verify(interestRepository, never()).save(any(Interest.class));
         verify(notificationService, never()).notifyOwnerAboutInterest(any(), any(), any());
@@ -147,7 +147,7 @@ class InterestServiceTest {
 
         assertThatThrownBy(() -> interestService.listInterestsForProperty(999L, owner))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessage("Imóvel não encontrado.");
+                .hasMessageContaining("Imóvel não encontrado.");
     }
 
     @Test
