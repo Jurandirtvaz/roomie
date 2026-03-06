@@ -33,7 +33,9 @@
             *ngFor="let notif of notifications"
             class="notif-item"
             [class.notif-unread]="!notif.read"
+            tabindex="0"
             (click)="markAsRead(notif)"
+            (keydown.enter)="markAsRead(notif)"
           >
             <span class="material-icons notif-icon">{{ notif.read ? 'notifications_none' : 'notifications_active' }}</span>
             <div class="notif-content">
@@ -134,6 +136,13 @@
             <button (click)="goToHabits()" class="dropdown-menu-item" role="menuitem">
               <span aria-hidden="true" class="material-icons">psychology</span>
               Meus Hábitos
+            </button>
+          </li>
+
+          <li>
+            <button (click)="goToRelatorios()" class="dropdown-menu-item" role="menuitem">
+              <span aria-hidden="true" class="material-icons">bar_chart</span>
+              Relatórios
             </button>
           </li>
 
