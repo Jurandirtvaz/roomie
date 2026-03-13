@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Property} from '../models/property';
 import {PropertyDetailView} from '../models/property-detail-view';
+import {PropertyRankingView} from '../models/property-ranking-view';
 import {environment} from '../../enviroments/enviroment';
 
 
@@ -21,32 +22,32 @@ export class PropertyService {
     return this.http.get<Property[]>(this.apiUrl);
   }
 
-  createProperty(propertyData: any): Observable<any> {
-    return this.http.post(this.apiUrl, propertyData, {responseType: 'text' as 'json'});
+  createProperty(propertyData: FormData): Observable<{ id: number }> {
+    return this.http.post<{ id: number }>(this.apiUrl, propertyData);
   }
 
   getMyProperties(): Observable<PropertyDetailView[]> {
     return this.http.get<PropertyDetailView[]>(`${this.apiUrl}/meus`);
   }
 
-  getById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  getById(id: number): Observable<Property> {
+    return this.http.get<Property>(`${this.apiUrl}/${id}`);
   }
 
-  publishProperty(id: number): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${id}/publish`, {});
+  publishProperty(id: number): Observable<{ id: number; status: string }> {
+    return this.http.patch<{ id: number; status: string }>(`${this.apiUrl}/${id}/publish`, {});
   }
 
-  setDraft(id: number): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${id}/draft`, {});
+  setDraft(id: number): Observable<{ id: number }> {
+    return this.http.patch<{ id: number }>(`${this.apiUrl}/${id}/draft`, {});
   }
 
-  deleteProperty(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  deleteProperty(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  updateProperty(id: number, formData: FormData): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, formData);
+  updateProperty(id: number, formData: FormData): Observable<{ id: number }> {
+    return this.http.put<{ id: number }>(`${this.apiUrl}/${id}`, formData);
   }
 
   getAllDetails(): Observable<PropertyDetailView[]> {
@@ -64,6 +65,10 @@ export class PropertyService {
   checkInterest(propertyId: number): Observable<boolean> {
     return this.http.get<{hasInterest: boolean}>(`${this.announcementsUrl}/${propertyId}/interest/check`)
       .pipe(map(res => res.hasInterest));
+  }
+
+  getRanking(): Observable<PropertyRankingView[]> {
+    return this.http.get<PropertyRankingView[]>(`${this.apiUrl}/ranking`);
   }
 
 }

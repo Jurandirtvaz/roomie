@@ -59,7 +59,7 @@ class RecommendationServiceTest {
 
         assertThat(match.getStudentId()).isEqualTo(2L);
         assertThat(match.getCompatibilityPercentage()).isEqualTo(100);
-        assertThat(match.getCommonInterests()).contains("Estuda de MORNING", "fitness", "diária", "futebol", "Mesmo curso (BCC)");
+        assertThat(match.getCommonInterests()).contains("Estuda de manhã", "fitness", "diária", "futebol", "Mesmo curso (BCC)");
     }
 
     @Test
@@ -73,7 +73,7 @@ class RecommendationServiceTest {
 
         assertThat(recommendations).hasSize(1);
         assertThat(recommendations.getFirst().getCompatibilityPercentage()).isEqualTo(50);
-        assertThat(recommendations.getFirst().getCommonInterests()).containsExactlyInAnyOrder("Estuda de MORNING", "fitness");
+        assertThat(recommendations.getFirst().getCommonInterests()).containsExactlyInAnyOrder("Estuda de manhã", "fitness");
     }
 
     @Test

@@ -19,12 +19,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import br.edu.ufape.roomie.repository.StudentRepository;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -53,6 +56,9 @@ class InterestControllerTest {
     @MockitoBean
     private UserDetailsService userDetailsService;
 
+    @MockitoBean
+    private StudentRepository studentRepository;
+
     @AfterEach
     void tearDown() {
         SecurityContextHolder.clearContext();
@@ -68,6 +74,8 @@ class InterestControllerTest {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(mockStudent, null, mockStudent.getAuthorities())
         );
+
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(mockStudent));
 
         var response = mvc.perform(post("/announcements/1/interest"))
                 .andReturn().getResponse();
@@ -87,6 +95,8 @@ class InterestControllerTest {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(mockStudent, null, mockStudent.getAuthorities())
         );
+
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(mockStudent));
 
         doThrow(new IllegalStateException("Você já demonstrou interesse neste imóvel."))
                 .when(interestService).registerInterest(eq(1L), any());
@@ -109,6 +119,8 @@ class InterestControllerTest {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(mockStudent, null, mockStudent.getAuthorities())
         );
+
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(mockStudent));
 
         doThrow(new RuntimeException("Imóvel não encontrado."))
                 .when(interestService).registerInterest(eq(999L), any());
@@ -151,7 +163,7 @@ class InterestControllerTest {
         );
 
         InterestSummaryDTO summaryDTO = new InterestSummaryDTO(
-                1L, 2L, "Estudante Teste", "Ciência da Computação", "UFAPE", InterestStatus.PENDING, LocalDateTime.now()
+                1L, 2L, "Estudante Teste", "estudante@teste.com", "Ciência da Computação", "UFAPE", InterestStatus.PENDING, LocalDateTime.now()
         );
         List<InterestSummaryDTO> lista = List.of(summaryDTO);
 
@@ -249,5 +261,89 @@ class InterestControllerTest {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
         assertThat(response.getContentAsString()).isEqualTo("Interesse não encontrado.");
+    }
+
+    @Test
+    @DisplayName("Deveria devolver hasInterest=true quando o estudante já demonstrou interesse")
+    void testaCheckInterestEstudanteComInteresse() throws Exception {
+        Student mockStudent = new Student();
+        mockStudent.setId(1L);
+        mockStudent.setEmail("estudante@ufape.edu.br");
+
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(mockStudent, null, mockStudent.getAuthorities())
+        );
+
+        when(interestService.hasInterest(eq(1L), any(Student.class))).thenReturn(true);
+
+        var response = mvc.perform(get("/announcements/1/interest/check"))
+                .andReturn().getResponse();
+
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).contains("\"hasInterest\":true");
+    }
+
+    @Test
+    @DisplayName("Deveria devolver hasInterest=false quando o estudante não demonstrou interesse")
+    void testaCheckInterestEstudanteSemInteresse() throws Exception {
+        Student mockStudent = new Student();
+        mockStudent.setId(1L);
+        mockStudent.setEmail("estudante@ufape.edu.br");
+
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(mockStudent, null, mockStudent.getAuthorities())
+        );
+
+        when(interestService.hasInterest(eq(1L), any(Student.class))).thenReturn(false);
+
+        var response = mvc.perform(get("/announcements/1/interest/check"))
+                .andReturn().getResponse();
+
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).contains("\"hasInterest\":false");
+    }
+
+    @Test
+    @DisplayName("Deveria devolver hasInterest=false quando o usuário não for estudante")
+    void testaCheckInterestUsuarioNaoEstudante() throws Exception {
+        User mockUser = new User();
+        mockUser.setId(2L);
+        mockUser.setEmail("dono@ufape.edu.br");
+
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(mockUser, null, mockUser.getAuthorities())
+        );
+
+        var response = mvc.perform(get("/announcements/1/interest/check"))
+                .andReturn().getResponse();
+
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).contains("\"hasInterest\":false");
+    }
+
+    // ── getInterests – branch adicional ──────────────────────────────────
+
+    @Test
+    @DisplayName("Deveria devolver HTTP 404 ao listar interessados de um imóvel inexistente")
+    void testaListarInteressadosImovelNaoEncontrado() throws Exception {
+        User mockOwner = new User();
+        mockOwner.setId(10L);
+
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(mockOwner, null, mockOwner.getAuthorities())
+        );
+
+        when(interestService.listInterestsForProperty(eq(999L), any(User.class)))
+                .thenThrow(new RuntimeException("Imóvel não encontrado."));
+
+        var response = mvc.perform(get("/announcements/999/interests"))
+                .andReturn().getResponse();
+
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        assertThat(response.getContentAsString()).isEqualTo("Imóvel não encontrado.");
     }
 }

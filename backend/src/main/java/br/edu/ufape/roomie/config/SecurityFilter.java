@@ -1,13 +1,14 @@
 package br.edu.ufape.roomie.config;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,15 +19,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class SecurityFilter extends OncePerRequestFilter {
 
-    private static final Logger logger = Logger.getLogger(SecurityFilter.class.getName());
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final TokenService tokenService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -37,13 +35,17 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.replace("Bearer ", "");
             String email = tokenService.validateToken(token);
-            logger.fine(() -> "Email do token: " + email);
+            log.debug("Email do token: {}", email);
 
 
             if (email != null && !email.isBlank()) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                try {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } catch (UsernameNotFoundException e) {
+                    log.warn("Token com usuário inválido ou inexistente: {}", email);
+                }
             }
         }
         filterChain.doFilter(request, response);
