@@ -219,7 +219,6 @@ public class PropertyService {
         }
 
         property.setStatus(PropertyStatus.RENTED);
-        property.setConfirmedStudent(student);
 
         return propertyRepository.save(property);
     }

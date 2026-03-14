@@ -47,6 +47,7 @@
 /* ── Abas ── */
 .tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 24px;
   border-bottom: 2px solid #e0e0e0;
@@ -180,3 +181,179 @@
 }
 
 .empty-icon { font-size: 48px; color: #ccc; }
+
+/* ── Formulário de despesas ── */
+.expense-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 24px;
+}
+
+.expense-header {
+  margin-bottom: 20px;
+}
+
+.expense-header h3 {
+  margin: 0 0 6px;
+  color: #1a1a1a;
+  font-size: 20px;
+}
+
+.expense-header p {
+  margin: 0;
+  color: #666;
+  font-size: 13px;
+}
+
+.expense-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2f2f2f;
+}
+
+.required-mark {
+  color: #d33f49;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d5dce3;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: #0d83d7;
+  box-shadow: 0 0 0 3px rgba(13, 131, 215, 0.12);
+}
+
+.input-invalid {
+  border-color: #d33f49 !important;
+  background: #fff7f8 !important;
+}
+
+.field-error {
+  margin: 0;
+  color: #c02834;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.field-hint {
+  margin: 0;
+  color: #8a8a8a;
+  font-size: 12px;
+}
+
+.form-status p {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-success {
+  background: #e9f8ef;
+  color: #1f7a38;
+  border: 1px solid #bee8cb;
+}
+
+.status-error {
+  background: #fff0f2;
+  color: #b3202b;
+  border: 1px solid #f2c6cc;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-btn {
+  min-width: 220px;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #0d83d7, #0460a1);
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s, filter 0.18s;
+}
+
+.save-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(4, 96, 161, 0.24);
+}
+
+.save-btn:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.35);
+  opacity: 0.72;
+}
+
+@media (max-width: 760px) {
+  .page-wrapper {
+    padding: 24px 14px;
+  }
+
+  .tabs {
+    gap: 4px;
+  }
+
+  .tab-btn {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .expense-card {
+    padding: 16px;
+  }
+
+  .expense-form {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .form-actions {
+    justify-content: stretch;
+  }
+
+  .save-btn {
+    width: 100%;
+    min-width: 0;
+  }
+}

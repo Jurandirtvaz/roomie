@@ -22,6 +22,10 @@
       <span class="material-icons">people</span>
       Engajamento de Estudantes
     </button>
+    <button class="tab-btn" [class.active]="activeTab === 'despesas'" (click)="setTab('despesas')">
+      <span class="material-icons">receipt_long</span>
+      Registro de Despesas
+    </button>
   </div>
 
   <!-- ───────── Tab: Ranking de Imóveis ───────── -->
@@ -128,6 +132,115 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- ───────── Tab: Registro de Despesas ───────── -->
+  <div *ngIf="activeTab === 'despesas'">
+    <div class="expense-card">
+      <div class="expense-header">
+        <h3>Registrar nova despesa</h3>
+        <p>Preencha os campos obrigatórios para lançar uma despesa do imóvel.</p>
+      </div>
+
+      <div class="loading-state" *ngIf="isLoadingProperties">
+        <span class="material-icons spin">autorenew</span>
+        Carregando imóveis...
+      </div>
+
+      <form
+        *ngIf="!isLoadingProperties"
+        [formGroup]="expenseForm"
+        (ngSubmit)="submitExpense()"
+        class="expense-form"
+        novalidate
+      >
+        <div class="form-field field-full">
+          <label for="expensePropertyId">Imóvel <span class="required-mark">*</span></label>
+          <select
+            id="expensePropertyId"
+            formControlName="propertyId"
+            [class.input-invalid]="isInvalid('propertyId')"
+          >
+            <option [ngValue]="null" disabled>Selecione um imóvel</option>
+            <option *ngFor="let property of myProperties" [ngValue]="property.idImovel">
+              {{ property.titulo }} - {{ property.cidade }}/{{ property.estado }}
+            </option>
+          </select>
+          <p class="field-error" *ngIf="hasError('propertyId', 'required')">
+            Selecione o imóvel da despesa.
+          </p>
+          <p class="field-hint" *ngIf="myProperties.length === 0">
+            Você ainda não possui imóveis para registrar despesas.
+          </p>
+        </div>
+
+        <div class="form-field field-full">
+          <label for="expenseDescription">Descrição <span class="required-mark">*</span></label>
+          <textarea
+            id="expenseDescription"
+            formControlName="description"
+            rows="3"
+            maxlength="160"
+            placeholder="Ex: Conta de energia de março"
+            [class.input-invalid]="isInvalid('description')"
+          ></textarea>
+          <p class="field-error" *ngIf="hasError('description', 'required')">
+            Informe uma descrição para a despesa.
+          </p>
+          <p class="field-error" *ngIf="hasError('description', 'maxlength')">
+            A descrição deve ter no máximo 160 caracteres.
+          </p>
+        </div>
+
+        <div class="form-field">
+          <label for="expenseAmount">Valor (R$) <span class="required-mark">*</span></label>
+          <input
+            id="expenseAmount"
+            type="number"
+            min="0.01"
+            step="0.01"
+            formControlName="amount"
+            placeholder="0,00"
+            [class.input-invalid]="isInvalid('amount')"
+          />
+          <p class="field-error" *ngIf="hasError('amount', 'required')">
+            Informe o valor da despesa.
+          </p>
+          <p class="field-error" *ngIf="hasError('amount', 'min')">
+            O valor deve ser maior que zero.
+          </p>
+        </div>
+
+        <div class="form-field">
+          <label for="expenseDate">Data da despesa <span class="required-mark">*</span></label>
+          <input
+            id="expenseDate"
+            type="date"
+            [max]="maxExpenseDate"
+            formControlName="expenseDate"
+            [class.input-invalid]="isInvalid('expenseDate')"
+          />
+          <p class="field-error" *ngIf="hasError('expenseDate', 'required')">
+            Informe a data da despesa.
+          </p>
+        </div>
+
+        <div class="form-status field-full" *ngIf="expenseSubmitSuccess || expenseSubmitError">
+          <p class="status-success" *ngIf="expenseSubmitSuccess">{{ expenseSubmitSuccess }}</p>
+          <p class="status-error" *ngIf="expenseSubmitError">{{ expenseSubmitError }}</p>
+        </div>
+
+        <div class="field-full form-actions">
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="isSubmittingExpense || myProperties.length === 0"
+          >
+            {{ isSubmittingExpense ? 'Salvando...' : 'Registrar despesa' }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 

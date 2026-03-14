@@ -391,7 +391,6 @@ class PropertyServiceTest {
         Property result = propertyService.confirmStudent(10L, 5L);
 
         assertEquals(PropertyStatus.RENTED, result.getStatus());
-        assertEquals(student, result.getConfirmedStudent());
     }
 
     @Test

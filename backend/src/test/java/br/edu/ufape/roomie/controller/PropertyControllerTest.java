@@ -376,7 +376,6 @@ class PropertyControllerTest {
 
         br.edu.ufape.roomie.model.Student student = new br.edu.ufape.roomie.model.Student();
         student.setId(5L);
-        property.setConfirmedStudent(student);
 
         when(propertyService.confirmStudent(1L, 5L)).thenReturn(property);
 

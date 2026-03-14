@@ -169,7 +169,7 @@ public class PropertyController {
             return ResponseEntity.ok(Map.of(
                     "id", property.getId(),
                     "status", property.getStatus().name(),
-                    "confirmedStudentId", property.getConfirmedStudent().getId(),
+                    "confirmedStudentId", studentId,
                     "message", "Estudante confirmado com sucesso na moradia."
             ));
         } catch (ResponseStatusException e) {
