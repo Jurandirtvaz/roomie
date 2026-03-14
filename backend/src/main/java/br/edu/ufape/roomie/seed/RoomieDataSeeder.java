@@ -80,6 +80,36 @@ public class RoomieDataSeeder implements CommandLineRunner {
 
         String defaultPassword = passwordEncoder.encode("123456");
 
+        var u1 = new User();
+        u1.setCpf(faker.cpf().valid());
+        u1.addTelefone(faker.phoneNumber().cellPhone());
+        u1.setPassword(defaultPassword);
+        u1.setGender(UserGender.values()[random.nextInt(UserGender.values().length)]);
+        u1.setEmail("joao@gmail.com");
+        u1.setName("joao");
+        u1.setRole(UserRole.USER);
+        userRepository.save(u1);
+
+        var u2 = new User();
+        u2.setCpf(faker.cpf().valid());
+        u2.addTelefone(faker.phoneNumber().cellPhone());
+        u2.setPassword(defaultPassword);
+        u2.setGender(UserGender.values()[random.nextInt(UserGender.values().length)]);
+        u2.setEmail("maria@gmail.com");
+        u2.setName("maria");
+        u2.setRole(UserRole.USER);
+        userRepository.save(u2);
+
+        var u3 = new User();
+        u3.setCpf(faker.cpf().valid());
+        u3.addTelefone(faker.phoneNumber().cellPhone());
+        u3.setPassword(defaultPassword);
+        u3.setGender(UserGender.values()[random.nextInt(UserGender.values().length)]);
+        u3.setEmail("carlos@gmail.com");
+        u3.setName("carlos");
+        u3.setRole(UserRole.USER);
+        userRepository.save(u3);
+
         // ── 20 proprietários ────────────────────────────────────────────────
         List<User> savedOwners = new ArrayList<>();
         for (int i = 0; i < 20; i++) {

@@ -377,7 +377,9 @@ class PropertyServiceTest {
 
         Property property = new Property();
         property.setId(10L);
+        property.setAvailableVacancies(2);
         property.setOwner(mockOwner);
+        property.setStatus(PropertyStatus.ACTIVE);
         property.setStatus(PropertyStatus.ACTIVE);
 
         br.edu.ufape.roomie.model.Student student = new br.edu.ufape.roomie.model.Student();
@@ -390,7 +392,8 @@ class PropertyServiceTest {
 
         Property result = propertyService.confirmStudent(10L, 5L);
 
-        assertEquals(PropertyStatus.RENTED, result.getStatus());
+        assertEquals(PropertyStatus.ACTIVE, result.getStatus());
+        assertEquals(1, result.getAvailableVacancies());
     }
 
     @Test

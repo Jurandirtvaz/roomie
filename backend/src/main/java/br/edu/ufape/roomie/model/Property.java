@@ -79,8 +79,10 @@ public class Property {
     private List<PropertyPhoto> photos = new ArrayList<>();
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<PropertyEvaluation> evaluations = new ArrayList<>();
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<Contract> contracts = new ArrayList<>();
 }

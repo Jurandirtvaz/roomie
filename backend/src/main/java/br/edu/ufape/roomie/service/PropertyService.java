@@ -218,7 +218,10 @@ public class PropertyService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O estudante selecionado não está na lista de candidatos desta moradia.");
         }
 
-        property.setStatus(PropertyStatus.RENTED);
+        property.setAvailableVacancies(property.getAvailableVacancies() - 1);
+        if (property.getAvailableVacancies() <= 0) {
+            property.setStatus(PropertyStatus.RENTED);
+        }
 
         return propertyRepository.save(property);
     }

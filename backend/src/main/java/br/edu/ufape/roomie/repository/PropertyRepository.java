@@ -31,7 +31,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     Optional<PropertyDetailView> findDetailById(@Param("id") Long id);
 
     @Query(value = "SELECT p.* FROM imovel p LEFT JOIN endereco a ON p.id_imovel = a.id_imovel " +
-            "WHERE p.status = 'ACTIVE' " +
+            "WHERE (p.status = 'ACTIVE' OR (p.status = 'RENTED' AND p.vagas_disponiveis > 0)) " +
             "AND (:location = '[ALL]' OR LOWER(a.cidade) LIKE LOWER(CONCAT('%', :location, '%'))) " +
             "AND (:district = '[ALL]' OR LOWER(a.bairro) LIKE LOWER(CONCAT('%', :district, '%'))) " +
             "AND (:minPrice < 0 OR p.preco >= :minPrice) " +
