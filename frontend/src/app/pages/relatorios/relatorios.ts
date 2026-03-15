@@ -1,16 +1,17 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PropertyService } from '../../services/propertyService';
-import { StudentService } from '../../services/student.service';
-import { PropertyRankingView } from '../../models/property-ranking-view';
-import { StudentEngagementView } from '../../models/student-engagement-view';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { HeaderComponent } from '../../components/shared/header/header.component';
-import { ToastService } from '../../services/toast.service';
-import { ExpenseService } from '../../services/expense.service';
 import { ExpenseRequest, ExpenseSummary } from '../../models/expense.model';
 import { PropertyDetailView } from '../../models/property-detail-view';
+import { PropertyRankingView } from '../../models/property-ranking-view';
+import { StudentEngagementView } from '../../models/student-engagement-view';
+import { ExpenseService } from '../../services/expense.service';
+import { PropertyService } from '../../services/propertyService';
+import { StudentService } from '../../services/student.service';
+import { ToastService } from '../../services/toast.service';
 
 type Tab = 'ranking' | 'engajamento' | 'despesas';
 
@@ -105,9 +106,21 @@ export class RelatoriosComponent implements OnInit {
 
   loadMyProperties(): void {
     this.isLoadingProperties = true;
-    this.propertyService.getMyResidentProperties().subscribe({
-      next: (properties: PropertyDetailView[]) => {
-        this.myProperties = properties;
+
+    forkJoin({
+      resident: this.propertyService.getMyResidentProperties(),
+      owned: this.propertyService.getMyProperties()
+    }).subscribe({
+      next: ({ resident, owned }) => {
+        // Remove duplicatas (caso um usuário seja de alguma forma dono e morador ao mesmo tempo)
+        const allProperties = [...resident, ...owned];
+        const uniquePropertiesMap = new Map<number, PropertyDetailView>();
+
+        allProperties.forEach(prop => {
+          uniquePropertiesMap.set(prop.idImovel, prop);
+        });
+
+        this.myProperties = Array.from(uniquePropertiesMap.values());
         this.isLoadingProperties = false;
         this.cdr.detectChanges();
       },

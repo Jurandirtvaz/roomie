@@ -1,9 +1,14 @@
 package br.edu.ufape.roomie.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import br.edu.ufape.roomie.dto.ExpenseRequestDTO;
 import br.edu.ufape.roomie.dto.ExpenseResponseDTO;
 import br.edu.ufape.roomie.dto.ExpenseSummaryDTO;
 import br.edu.ufape.roomie.enums.ContractStatus;
+import br.edu.ufape.roomie.model.*;
 import br.edu.ufape.roomie.model.Contract;
 import br.edu.ufape.roomie.model.Expense;
 import br.edu.ufape.roomie.model.Property;
@@ -11,7 +16,10 @@ import br.edu.ufape.roomie.model.Student;
 import br.edu.ufape.roomie.repository.ContractRepository;
 import br.edu.ufape.roomie.repository.ExpenseRepository;
 import br.edu.ufape.roomie.repository.PropertyRepository;
-import br.edu.ufape.roomie.repository.StudentRepository;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,197 +33,281 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class ExpenseServiceTest {
 
-    @Mock
-    private ExpenseRepository expenseRepository;
-    @Mock
-    private PropertyRepository propertyRepository;
-    @Mock
-    private ContractRepository contractRepository;
-    @Mock
-    private StudentRepository studentRepository;
+  @Mock private ExpenseRepository expenseRepository;
+  @Mock private PropertyRepository propertyRepository;
+  @Mock private ContractRepository contractRepository;
 
-    @InjectMocks
-    private ExpenseService expenseService;
+  @InjectMocks private ExpenseService expenseService;
 
-    private Student mockStudent;
+  private Student mockStudent;
 
-    @BeforeEach
-    void setUp() {
-        mockStudent = new Student();
-        mockStudent.setId(1L);
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(mockStudent, null, null)
-        );
-        lenient().when(studentRepository.findById(1L)).thenReturn(Optional.of(mockStudent));
-    }
+  @BeforeEach
+  void setUp() {
+    mockStudent = new Student();
+    mockStudent.setId(1L);
+    SecurityContextHolder.getContext()
+        .setAuthentication(new UsernamePasswordAuthenticationToken(mockStudent, null, null));
 
-    @AfterEach
-    void tearDown() {
-        SecurityContextHolder.clearContext();
-    }
+    Property defaultProp = new Property();
+    defaultProp.setId(10L);
+    User defaultOwner = new User();
+    defaultOwner.setId(999L);
+    defaultProp.setOwner(defaultOwner);
+    lenient().when(propertyRepository.findById(anyLong())).thenReturn(Optional.of(defaultProp));
+  }
 
-    @Test
-    void shouldCreateExpenseSuccessfully() {
-        Property property = new Property();
-        property.setId(10L);
+  @AfterEach
+  void tearDown() {
+    SecurityContextHolder.clearContext();
+  }
 
-        ExpenseRequestDTO dto = new ExpenseRequestDTO();
-        dto.setPropertyId(10L);
-        dto.setDescription("Energia");
-        dto.setAmount(new BigDecimal("150.00"));
-        dto.setExpenseDate(LocalDate.now());
+  @Test
+  void shouldCreateExpenseSuccessfully() {
+    Property property = new Property();
+    property.setId(10L);
 
-        when(propertyRepository.findById(10L)).thenReturn(Optional.of(property));
-        when(contractRepository.existsByPropertyIdAndStudentIdAndStatusIn(10L, 1L, List.of(ContractStatus.ACTIVE))).thenReturn(true);
-        when(expenseRepository.save(any())).thenAnswer(i -> {
-            Expense e = i.getArgument(0);
-            e.setId(50L);
-            return e;
-        });
+    ExpenseRequestDTO dto = new ExpenseRequestDTO();
+    dto.setPropertyId(10L);
+    dto.setDescription("Energia");
+    dto.setAmount(new BigDecimal("150.00"));
+    dto.setExpenseDate(LocalDate.now());
 
-        ExpenseResponseDTO result = expenseService.createExpense(dto);
+    when(propertyRepository.findById(10L)).thenReturn(Optional.of(property));
+    when(contractRepository.existsByPropertyIdAndUserIdAndStatusIn(
+            10L, 1L, List.of(ContractStatus.ACTIVE)))
+        .thenReturn(true);
+    when(expenseRepository.save(any()))
+        .thenAnswer(
+            i -> {
+              Expense e = i.getArgument(0);
+              e.setId(50L);
+              return e;
+            });
 
-        assertNotNull(result);
-        assertEquals("Energia", result.getDescription());
-        assertEquals(new BigDecimal("150.00"), result.getAmount());
-    }
+    ExpenseResponseDTO result = expenseService.createExpense(dto);
 
-    @Test
-    @DisplayName("Deve lançar UNAUTHORIZED quando a autenticação for nula")
-    void getAuthenticatedStudent_whenAuthIsNull_throwsUnauthorized() {
-        SecurityContextHolder.getContext().setAuthentication(null);
+    assertNotNull(result);
+    assertEquals("Energia", result.getDescription());
+    assertEquals(new BigDecimal("150.00"), result.getAmount());
+  }
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, 
-                () -> expenseService.getExpensesByProperty(10L));
-        assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusCode());
-    }
+  @Test
+  @DisplayName("Deve registrar despesa com sucesso sendo um usuário não-estudante (proprietário)")
+  void shouldCreateExpenseSuccessfullyAsOwner() {
+    br.edu.ufape.roomie.model.User owner = new User();
+    owner.setId(2L);
+    SecurityContextHolder.getContext()
+        .setAuthentication(new UsernamePasswordAuthenticationToken(owner, null, null));
 
-    @Test
-    @DisplayName("Deve lançar UNAUTHORIZED quando a autenticação não estiver autenticada")
-    void getAuthenticatedStudent_whenNotAuthenticated_throwsUnauthorized() {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(mockStudent, null, null);
-        auth.setAuthenticated(false);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+    Property property = new Property();
+    property.setId(20L);
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, 
-                () -> expenseService.getExpensesByProperty(10L));
-        assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusCode());
-    }
+    ExpenseRequestDTO dto = new ExpenseRequestDTO();
+    dto.setPropertyId(20L);
+    dto.setDescription("Manutenção");
+    dto.setAmount(new BigDecimal("300.00"));
+    dto.setExpenseDate(LocalDate.now());
 
-    @Test
-    @DisplayName("Deve lançar FORBIDDEN quando o estudante autenticado não for encontrado no repositório")
-    void getAuthenticatedStudent_whenStudentNotFound_throwsForbidden() {
-        when(studentRepository.findById(1L)).thenReturn(Optional.empty());
+    when(propertyRepository.findById(20L)).thenReturn(Optional.of(property));
+    when(contractRepository.existsByPropertyIdAndUserIdAndStatusIn(
+            20L, 2L, List.of(ContractStatus.ACTIVE)))
+        .thenReturn(true);
+    when(expenseRepository.save(any()))
+        .thenAnswer(
+            i -> {
+              Expense e = i.getArgument(0);
+              e.setId(51L);
+              return e;
+            });
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, 
-                () -> expenseService.getExpensesByProperty(10L));
-        assertEquals(HttpStatus.FORBIDDEN, ex.getStatusCode());
-    }
+    ExpenseResponseDTO result = expenseService.createExpense(dto);
 
-    @Test
-    @DisplayName("Deve lançar NOT_FOUND quando o imóvel não for encontrado ao criar despesa")
-    void createExpense_whenPropertyNotFound_throwsNotFound() {
-        ExpenseRequestDTO dto = new ExpenseRequestDTO();
-        dto.setPropertyId(99L);
-        when(propertyRepository.findById(99L)).thenReturn(Optional.empty());
+    assertNotNull(result);
+    assertEquals("Manutenção", result.getDescription());
+    assertEquals(new BigDecimal("300.00"), result.getAmount());
+  }
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, 
-                () -> expenseService.createExpense(dto));
-        assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
-    }
+  @Test
+  @DisplayName("Deve lançar UNAUTHORIZED quando a autenticação for nula")
+  void getAuthenticatedStudent_whenAuthIsNull_throwsUnauthorized() {
+    SecurityContextHolder.getContext().setAuthentication(null);
 
-    @Test
-    @DisplayName("Deve lançar FORBIDDEN quando o estudante não for morador ao tentar ver despesas")
-    void getExpensesByProperty_whenNotResident_throwsForbidden() {
-        when(contractRepository.existsByPropertyIdAndStudentIdAndStatusIn(10L, 1L, List.of(ContractStatus.ACTIVE))).thenReturn(false);
+    ResponseStatusException ex =
+        assertThrows(
+            ResponseStatusException.class, () -> expenseService.getExpensesByProperty(10L));
+    assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusCode());
+  }
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, 
-                () -> expenseService.getExpensesByProperty(10L));
-        assertEquals(HttpStatus.FORBIDDEN, ex.getStatusCode());
-    }
+  @Test
+  @DisplayName("Deve lançar UNAUTHORIZED quando a autenticação não estiver autenticada")
+  void getAuthenticatedStudent_whenNotAuthenticated_throwsUnauthorized() {
+    UsernamePasswordAuthenticationToken auth =
+        new UsernamePasswordAuthenticationToken(mockStudent, null, null);
+    auth.setAuthenticated(false);
+    SecurityContextHolder.getContext().setAuthentication(auth);
 
-    @Test
-    void shouldThrowForbiddenWhenNotResident() {
-        Property property = new Property();
-        property.setId(10L);
+    ResponseStatusException ex =
+        assertThrows(
+            ResponseStatusException.class, () -> expenseService.getExpensesByProperty(10L));
+    assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusCode());
+  }
 
-        ExpenseRequestDTO dto = new ExpenseRequestDTO();
-        dto.setPropertyId(10L);
+  @Test
+  @DisplayName("Deve lançar NOT_FOUND quando o imóvel não for encontrado ao criar despesa")
+  void createExpense_whenPropertyNotFound_throwsNotFound() {
+    ExpenseRequestDTO dto = new ExpenseRequestDTO();
+    dto.setPropertyId(99L);
+    when(propertyRepository.findById(99L)).thenReturn(Optional.empty());
 
-        when(propertyRepository.findById(10L)).thenReturn(Optional.of(property));
-        when(contractRepository.existsByPropertyIdAndStudentIdAndStatusIn(10L, 1L, List.of(ContractStatus.ACTIVE))).thenReturn(false);
+    ResponseStatusException ex =
+        assertThrows(ResponseStatusException.class, () -> expenseService.createExpense(dto));
+    assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+  }
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> expenseService.createExpense(dto));
-        assertEquals(HttpStatus.FORBIDDEN, ex.getStatusCode());
-    }
+  @Test
+  @DisplayName("Deve lançar FORBIDDEN quando o estudante não for morador ao tentar ver despesas")
+  void getExpensesByProperty_whenNotResident_throwsForbidden() {
+    Property prop = new Property();
+    prop.setId(10L);
+    User otherOwner = new User();
+    otherOwner.setId(99L);
+    prop.setOwner(otherOwner);
+    when(propertyRepository.findById(10L)).thenReturn(Optional.of(prop));
 
-    @Test
-    void shouldCalculateSummarySuccessfully() {
-        Expense e1 = new Expense();
-        e1.setId(1L); e1.setAmount(new BigDecimal("100.00")); e1.setRegisteredBy(mockStudent); e1.setExpenseDate(LocalDate.now());
+    when(contractRepository.existsByPropertyIdAndUserIdAndStatusIn(
+            10L, 1L, List.of(ContractStatus.ACTIVE)))
+        .thenReturn(false);
 
-        Expense e2 = new Expense();
-        e2.setId(2L); e2.setAmount(new BigDecimal("50.00")); e2.setRegisteredBy(mockStudent); e2.setExpenseDate(LocalDate.now());
+    ResponseStatusException ex =
+        assertThrows(
+            ResponseStatusException.class, () -> expenseService.getExpensesByProperty(10L));
+    assertEquals(HttpStatus.FORBIDDEN, ex.getStatusCode());
+  }
 
-        when(contractRepository.existsByPropertyIdAndStudentIdAndStatusIn(10L, 1L, List.of(ContractStatus.ACTIVE))).thenReturn(true);
-        when(expenseRepository.findByPropertyId(10L)).thenReturn(List.of(e1, e2));
+  @Test
+  void shouldThrowForbiddenWhenNotResident() {
+    Property property = new Property();
+    property.setId(10L);
 
-        when(contractRepository.findByPropertyIdAndStatus(10L, ContractStatus.ACTIVE)).thenReturn(List.of(new Contract(), new Contract(), new Contract()));
+    ExpenseRequestDTO dto = new ExpenseRequestDTO();
+    dto.setPropertyId(10L);
 
-        ExpenseSummaryDTO result = expenseService.getExpensesByProperty(10L);
+    when(propertyRepository.findById(10L)).thenReturn(Optional.of(property));
+    when(contractRepository.existsByPropertyIdAndUserIdAndStatusIn(
+            10L, 1L, List.of(ContractStatus.ACTIVE)))
+        .thenReturn(false);
 
-        assertEquals(new BigDecimal("150.00"), result.getTotalAmount());
-        assertEquals(3, result.getNumberOfResidents());
-        assertEquals(new BigDecimal("50.00"), result.getAmountPerResident());
-        assertEquals(2, result.getExpenses().size());
-    }
+    ResponseStatusException ex =
+        assertThrows(ResponseStatusException.class, () -> expenseService.createExpense(dto));
+    assertEquals(HttpStatus.FORBIDDEN, ex.getStatusCode());
+  }
 
-    @Test
-    @DisplayName("Deve retornar valor por morador igual a ZERO se não houver moradores ativos para dividir")
-    void shouldReturnZeroAmountPerResidentWhenNoActiveResidents() {
-        Expense e1 = new Expense();
-        e1.setId(1L);
-        e1.setAmount(new BigDecimal("100.00"));
-        e1.setRegisteredBy(mockStudent);
-        e1.setExpenseDate(LocalDate.now());
+  @Test
+  void shouldCalculateSummarySuccessfully() {
+    Expense e1 = new Expense();
+    e1.setId(1L);
+    e1.setAmount(new BigDecimal("100.00"));
+    e1.setRegisteredBy(mockStudent);
+    e1.setExpenseDate(LocalDate.now());
 
-        when(contractRepository.existsByPropertyIdAndStudentIdAndStatusIn(10L, 1L, List.of(ContractStatus.ACTIVE))).thenReturn(true);
-        when(expenseRepository.findByPropertyId(10L)).thenReturn(List.of(e1));
+    Expense e2 = new Expense();
+    e2.setId(2L);
+    e2.setAmount(new BigDecimal("50.00"));
+    e2.setRegisteredBy(mockStudent);
+    e2.setExpenseDate(LocalDate.now());
 
-        when(contractRepository.findByPropertyIdAndStatus(10L, ContractStatus.ACTIVE)).thenReturn(List.of());
+    when(contractRepository.existsByPropertyIdAndUserIdAndStatusIn(
+            10L, 1L, List.of(ContractStatus.ACTIVE)))
+        .thenReturn(true);
+    when(expenseRepository.findByPropertyId(10L)).thenReturn(List.of(e1, e2));
 
-        ExpenseSummaryDTO result = expenseService.getExpensesByProperty(10L);
+    when(contractRepository.findByPropertyIdAndStatus(10L, ContractStatus.ACTIVE))
+        .thenReturn(List.of(new Contract(), new Contract(), new Contract()));
 
-        assertEquals(new BigDecimal("100.00"), result.getTotalAmount());
-        assertEquals(0, result.getNumberOfResidents());
-        assertEquals(BigDecimal.ZERO, result.getAmountPerResident());
-    }
+    ExpenseSummaryDTO result = expenseService.getExpensesByProperty(10L);
 
-    @Test
-    @DisplayName("Deve retornar valor por morador igual a ZERO se não houver despesas, mas houver moradores")
-    void shouldReturnZeroAmountPerResidentWhenNoExpensesButHasResidents() {
-        when(contractRepository.existsByPropertyIdAndStudentIdAndStatusIn(10L, 1L, List.of(ContractStatus.ACTIVE))).thenReturn(true);
-        when(expenseRepository.findByPropertyId(10L)).thenReturn(List.of());
+    assertEquals(new BigDecimal("150.00"), result.getTotalAmount());
+    assertEquals(3, result.getNumberOfResidents());
+    assertEquals(new BigDecimal("50.00"), result.getAmountPerResident());
+    assertEquals(2, result.getExpenses().size());
+  }
 
-        when(contractRepository.findByPropertyIdAndStatus(10L, ContractStatus.ACTIVE)).thenReturn(List.of(new Contract(), new Contract()));
+  @Test
+  @DisplayName(
+      "Deve retornar resumo de despesas com sucesso sendo um usuário não-estudante (proprietário)")
+  void shouldCalculateSummarySuccessfullyAsOwner() {
+    br.edu.ufape.roomie.model.User owner = new User();
+    owner.setId(2L);
+    SecurityContextHolder.getContext()
+        .setAuthentication(new UsernamePasswordAuthenticationToken(owner, null, null));
 
-        ExpenseSummaryDTO result = expenseService.getExpensesByProperty(10L);
+    when(contractRepository.existsByPropertyIdAndUserIdAndStatusIn(
+            20L, 2L, List.of(ContractStatus.ACTIVE)))
+        .thenReturn(true);
 
-        assertEquals(BigDecimal.ZERO, result.getTotalAmount());
-        assertEquals(2, result.getNumberOfResidents());
-        assertEquals(BigDecimal.ZERO, result.getAmountPerResident());
-        assertEquals(0, result.getExpenses().size());
-    }
+    Expense e1 = new Expense();
+    e1.setId(10L);
+    e1.setAmount(new BigDecimal("200.00"));
+    e1.setRegisteredBy(owner);
+    e1.setExpenseDate(LocalDate.now());
+
+    when(expenseRepository.findByPropertyId(20L)).thenReturn(List.of(e1));
+    when(contractRepository.findByPropertyIdAndStatus(20L, ContractStatus.ACTIVE))
+        .thenReturn(List.of(new Contract(), new Contract()));
+
+    ExpenseSummaryDTO result = expenseService.getExpensesByProperty(20L);
+
+    assertEquals(new BigDecimal("200.00"), result.getTotalAmount());
+    assertEquals(2, result.getNumberOfResidents());
+    assertEquals(new BigDecimal("100.00"), result.getAmountPerResident());
+    assertEquals(1, result.getExpenses().size());
+  }
+
+  @Test
+  @DisplayName(
+      "Deve retornar valor por morador igual a ZERO se não houver moradores ativos para dividir")
+  void shouldReturnZeroAmountPerResidentWhenNoActiveResidents() {
+    Expense e1 = new Expense();
+    e1.setId(1L);
+    e1.setAmount(new BigDecimal("100.00"));
+    e1.setRegisteredBy(mockStudent);
+    e1.setExpenseDate(LocalDate.now());
+
+    when(contractRepository.existsByPropertyIdAndUserIdAndStatusIn(
+            10L, 1L, List.of(ContractStatus.ACTIVE)))
+        .thenReturn(true);
+    when(expenseRepository.findByPropertyId(10L)).thenReturn(List.of(e1));
+
+    when(contractRepository.findByPropertyIdAndStatus(10L, ContractStatus.ACTIVE))
+        .thenReturn(List.of());
+
+    ExpenseSummaryDTO result = expenseService.getExpensesByProperty(10L);
+
+    assertEquals(new BigDecimal("100.00"), result.getTotalAmount());
+    assertEquals(0, result.getNumberOfResidents());
+    assertEquals(BigDecimal.ZERO, result.getAmountPerResident());
+  }
+
+  @Test
+  @DisplayName(
+      "Deve retornar valor por morador igual a ZERO se não houver despesas, mas houver moradores")
+  void shouldReturnZeroAmountPerResidentWhenNoExpensesButHasResidents() {
+    when(contractRepository.existsByPropertyIdAndUserIdAndStatusIn(
+            10L, 1L, List.of(ContractStatus.ACTIVE)))
+        .thenReturn(true);
+    when(expenseRepository.findByPropertyId(10L)).thenReturn(List.of());
+
+    when(contractRepository.findByPropertyIdAndStatus(10L, ContractStatus.ACTIVE))
+        .thenReturn(List.of(new Contract(), new Contract()));
+
+    ExpenseSummaryDTO result = expenseService.getExpensesByProperty(10L);
+
+    assertEquals(BigDecimal.ZERO, result.getTotalAmount());
+    assertEquals(2, result.getNumberOfResidents());
+    assertEquals(BigDecimal.ZERO, result.getAmountPerResident());
+    assertEquals(0, result.getExpenses().size());
+  }
 }

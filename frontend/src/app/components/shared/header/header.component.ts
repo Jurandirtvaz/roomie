@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -7,15 +8,14 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output,
+  Output
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Auth } from '../../../auth/auth';
-import { NotificationService } from '../../../services/notification.service';
-import { AppNotification } from '../../../models/notification.model';
-import { Subscription, interval } from 'rxjs';
+import { Subscription, timer, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { Auth } from '../../../auth/auth';
+import { AppNotification } from '../../../models/notification.model';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-header',
@@ -46,12 +46,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadNotifications();
-    // Polling a cada 30 segundos
-    this.pollSub = interval(30000).pipe(
-      switchMap(() => this.notificationService.getNotifications())
+    // Escuta mudanças de usuário e inicia o polling somente se houver usuário logado
+    this.pollSub = this.user$.pipe(
+      switchMap(user => {
+        if (!user) {
+          return of(null);
+        }
+        // Dispara imediatamente e depois a cada 30 segundos
+        return timer(0, 30000).pipe(
+          switchMap(() => this.notificationService.getNotifications())
+        );
+      })
     ).subscribe(notifications => {
-      this.notifications = notifications;
+      if (notifications) {
+        this.notifications = notifications;
+      } else {
+        this.notifications = [];
+      }
     });
   }
 
